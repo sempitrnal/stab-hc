@@ -5,7 +5,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 const Loading = () => {
   return (
-    <div className="w-full h-[200px] flex justify-center items-center">
+    <div className="w-full h-[150px] flex justify-center items-center">
       <p className="font-mono leading-loose tracking-widest text-center">
         Loading...
       </p>
