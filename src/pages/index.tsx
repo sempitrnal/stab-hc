@@ -54,7 +54,7 @@ const Home = () => {
             with relentless energy and unapologetic intensity, we deliver a raw
             and powerful sound that hits hard and leaves a lasting impression."
         />
-        <meta property="og:title" content="stab.cult" />
+        <meta property="og:title" content="stab.cult | juana osmeña hardcore" />
         <meta
           property="og:description"
           content="stab is a brutal hardcore band
