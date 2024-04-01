@@ -47,7 +47,7 @@ const Home = () => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>stab hc</title>
+        <title>stab.cult</title>
         <meta
           name="description"
           content="stab is a brutal hardcore band
