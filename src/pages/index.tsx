@@ -1,5 +1,5 @@
 import Stab from "@/components/Stab";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -58,16 +58,19 @@ const Home = () => {
           <p className="text-lg leading-loose tracking-widest ">
             juana osmeña hardcore
           </p>
-          <p className="text-sm leading-loose tracking-widest">
-            stab is a brutal hardcore band with relentless energy and
-            unapologetic intensity, we deliver a raw and powerful sound that
-            hits hard and leaves a lasting impression. Our lineup includes Irish
-            on vocals, Daryl on bass, Bo and Jofel on guitars, and Arxan on
-            drums. Together, {"we're"} here to bring the noise and show the
-            world what hardcore music is all about. But for us, hardcore is more
-            than just music — {"it's "}a way of life. {"It's"} about resilience,
-            passion, and standing up for what you believe in, no matter the
-            odds.
+          <p className="text-sm leading-loose tracking-widest lowercase">
+            <span className="font-bold">stab </span> is a brutal hardcore band
+            with relentless energy and unapologetic intensity, we deliver a raw
+            and powerful sound that hits hard and leaves a lasting impression.
+            Our lineup includes <span className="font-bold">Irish</span> on
+            vocals, <span className="font-bold">Daryl</span> on bass,{" "}
+            <span className="font-bold">Bo</span> and{" "}
+            <span className="font-bold">Jofel</span> on guitars, and{" "}
+            <span className="font-bold">Arxan</span> on drums. Together,{" "}
+            {"we're"} here to bring the noise and show the world what hardcore
+            music is all about. But for us, hardcore is more than just music —{" "}
+            {"it's "}a way of life. {"It's"} about resilience, passion, and
+            standing up for what you believe in, no matter the odds.
           </p>
           <p className="text-xs leading-loose tracking-widest">
             be yourself lang maws
@@ -92,11 +95,13 @@ const Home = () => {
             />
           )}
         </div>
-        <p>
-          {playing
-            ? "playing the most fire song rn!"
-            : "play the most fire song ever"}
-        </p>
+        <div className="relative">
+          {" "}
+          {playing && (
+            <motion.p>{"playing the most fire song rn! 🔥🔥🔥"}</motion.p>
+          )}{" "}
+          {!playing && <motion.p>{"play the most fire song ever 😠"}</motion.p>}
+        </div>
       </div>
     </motion.div>
   );
