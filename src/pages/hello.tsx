@@ -55,8 +55,13 @@ function Hello() {
       <div className="mt-5">
         <hr />
       </div>
-      <div className="flex flex-col items-center gap-5 mt-28">
-        <p className="font-mono">hi aiko, u are the best {"<3"}</p>
+      <div className="flex flex-col items-center gap-5 text-sm mt-28">
+        <p className="font-mono text-center">
+          hi aiko, u are the best n u deserve all the good things in tha whole
+          wide world {"<3"} ily {"   "}
+          🙂↕️🙂↕️🙂↕️
+        </p>
+        <small>p.s. ion have the emoji yet 😭</small>
       </div>
     </motion.div>
   );
