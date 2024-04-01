@@ -58,10 +58,10 @@ const Stab = () => {
 
       <StabLogo />
       <OrbitControls
-        // autoRotate
+        autoRotate
         autoRotateSpeed={2}
-        maxDistance={1.3}
-        minDistance={1.1}
+        maxDistance={1}
+        minDistance={0.7}
       />
     </Canvas>
   );
