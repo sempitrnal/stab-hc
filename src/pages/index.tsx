@@ -54,14 +54,14 @@ const Home = () => {
             with relentless energy and unapologetic intensity, we deliver a raw
             and powerful sound that hits hard and leaves a lasting impression."
         />
-        <meta property="og:title" content="Juana Osmeña Hardcore" />
+        <meta property="og:title" content="stab.cult" />
         <meta
           property="og:description"
           content="stab is a brutal hardcore band
             with relentless energy and unapologetic intensity, we deliver a raw
             and powerful sound that hits hard and leaves a lasting impression."
         />
-        <meta property="og:image" content="/stab.png" />
+        <meta property="og:image" content="/dead.jpg" />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
       </Head>
       <Suspense fallback={<Loading />}>
