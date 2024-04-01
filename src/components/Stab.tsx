@@ -50,7 +50,7 @@ const Stab = () => {
   return (
     <Canvas
       style={{
-        width: "500px",
+        width: "100%",
         height: "200px",
       }}
     >
