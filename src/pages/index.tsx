@@ -68,9 +68,9 @@ const Home = () => {
         <Stab />
       </Suspense>
 
-      <div className="w-full md:w-[30rem] px-10 md:px-0">
-        <div className="flex flex-col gap-8 font-mono text-center">
-          <p className="text-lg leading-loose tracking-widest ">
+      <div className="w-full md:w-[30rem] px-6 md:px-0 mt-5">
+        <div className="flex flex-col items-center gap-8 font-mono text-center">
+          <p className="px-3 text-lg leading-loose tracking-widest text-center border rounded-md w-max ">
             juana osmeña hardcore
           </p>
           <p className="text-sm leading-loose tracking-widest lowercase">
@@ -118,6 +118,7 @@ const Home = () => {
           {!playing && <motion.p>{"play the most fire song ever 😠"}</motion.p>}
         </div>
       </div>
+      <div className="mt-20 text-xs">made by bo, hells yeah!</div>
     </motion.div>
   );
 };

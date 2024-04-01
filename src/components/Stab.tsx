@@ -51,7 +51,7 @@ const Stab = () => {
     <Canvas
       style={{
         width: "100%",
-        height: "200px",
+        height: "150px",
       }}
     >
       <directionalLight position={[0.5, -0, 1]} intensity={3000} />
