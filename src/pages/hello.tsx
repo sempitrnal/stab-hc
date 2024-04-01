@@ -31,8 +31,8 @@ function Hello() {
         </video>
         <p className="">bo and aiko best couple 💗💗💗</p>
       </div>
-      <div className="flex flex-col items-center gap-5 mt-16">
-        <p className="text-lg font-semibold">eepy bo & aiko</p>
+      <div className="flex flex-col items-center gap-5 mt-10">
+        <p className="">eepy bo & aiko</p>
         <Image
           className="rounded-md"
           src="/biko/biko-sleep.jpeg"
@@ -42,7 +42,7 @@ function Hello() {
         />
       </div>
       <div className="flex flex-col items-center gap-5 mt-16">
-        <p className="text-lg font-semibold">my pretty girl {"<3"}</p>
+        <p className="">my pretty girl {"<3"}</p>
         <Image
           className="rounded-md"
           src="/biko/aiko.jpeg"

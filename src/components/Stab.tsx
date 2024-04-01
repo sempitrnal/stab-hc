@@ -33,7 +33,7 @@ const StabLogo = () => {
   changeColor("#9679ff"); // Change "red" to the desired color
 
   return (
-    <mesh position={[0.05, 0, 0]}>
+    <mesh position={[0.05, -0.15, 0]}>
       <primitive object={gltf.scene} />
     </mesh>
   );
@@ -58,7 +58,7 @@ const Stab = () => {
 
       <StabLogo />
       <OrbitControls
-        autoRotate
+        // autoRotate
         autoRotateSpeed={2}
         maxDistance={1.3}
         minDistance={1.1}

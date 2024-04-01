@@ -2,7 +2,15 @@ import Stab from "@/components/Stab";
 import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
+import {
+  FaPlay,
+  FaPause,
+  FaFacebook,
+  FaFacebookSquare,
+  FaInstagramSquare,
+  FaInstagram,
+  FaSpotify,
+} from "react-icons/fa";
 const Loading = () => {
   return (
     <div className="w-full h-[150px] flex justify-center items-center">
@@ -68,8 +76,8 @@ const Home = () => {
         <Stab />
       </Suspense>
 
-      <div className="w-full md:w-[30rem] px-6 md:px-0 mt-5">
-        <div className="flex flex-col items-center gap-8 font-mono text-center">
+      <div className="w-full md:w-[30rem] px-10  md:px-0 mt-5">
+        <div className="flex flex-col items-center gap-8 font-mono text-justify">
           <p className="px-3 text-lg leading-loose tracking-widest text-center border rounded-md w-max ">
             juana osmeña hardcore
           </p>
@@ -118,7 +126,30 @@ const Home = () => {
           {!playing && <motion.p>{"play the most fire song ever 😠"}</motion.p>}
         </div>
       </div>
-      <div className="mt-20 text-xs">made by bo, hells yeah!</div>
+      <div className="flex gap-2 mt-20">
+        <FaFacebookSquare
+          className="text-[2rem] text-black cursor-pointer transition-all duration-300 hover:text-stone-800"
+          onClick={() => {
+            window.open("https://www.facebook.com/stabzilog", "_blank");
+          }}
+        />
+        <FaInstagram
+          className="text-[2rem] text-black cursor-pointer transition-all duration-300 hover:text-stone-800"
+          onClick={() => {
+            window.open("https://www.instagram.com/stab.cult", "_blank");
+          }}
+        />
+        <FaSpotify
+          className="text-[2rem] text-black cursor-pointer transition-all duration-300 hover:text-stone-800"
+          onClick={() => {
+            window.open(
+              "https://open.spotify.com/artist/2KQ5nW2YXh7v1v1dW0hK9A",
+              "_blank"
+            );
+          }}
+        />
+      </div>
+      <div className="mt-10 text-xs">made by bo, hells yeah!</div>
     </motion.div>
   );
 };
