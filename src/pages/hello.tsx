@@ -25,6 +25,7 @@ function Hello() {
           className=""
           autoPlay
           loop
+          playsInline
           style={{ width: "", height: "500px" }}
         >
           <source src="/biko/biko.webm" />
