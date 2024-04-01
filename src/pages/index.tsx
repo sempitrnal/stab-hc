@@ -143,7 +143,7 @@ const Home = () => {
           className="text-[2rem] text-black cursor-pointer transition-all duration-300 hover:text-stone-800"
           onClick={() => {
             window.open(
-              "https://open.spotify.com/artist/2KQ5nW2YXh7v1v1dW0hK9A",
+              "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8?si=46763bd7772543d1",
               "_blank"
             );
           }}
