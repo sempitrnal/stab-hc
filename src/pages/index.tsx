@@ -19,8 +19,8 @@ const Home = () => {
     const audio = ref.current;
     if (audio) {
       audio.volume = 0.1;
-      audio.play();
-      setPlaying(true);
+      // audio.play();
+      // setPlaying(true);
       // Add event listener for when audio ends
       audio.addEventListener("ended", handleAudioEnded);
     }
@@ -43,7 +43,7 @@ const Home = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col items-center justify-center"
+      className="flex flex-col items-center justify-center w-full pb-10 h-max"
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
@@ -92,7 +92,11 @@ const Home = () => {
             />
           )}
         </div>
-        <p>playing the most fire song rn!</p>
+        <p>
+          {playing
+            ? "playing the most fire song rn!"
+            : "play the most fire song ever"}
+        </p>
       </div>
     </motion.div>
   );
