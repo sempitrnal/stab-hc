@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -18,6 +19,13 @@ function Hello() {
         opacity: 0,
       }}
     >
+      <Head>
+        <title>biko</title>
+        <meta name="description" content="bo and aiko best couple 💗💗💗" />
+        <meta property="og:title" content="bo and aiko = biko 🍚" />
+        <meta property="og:description" content="bo and aiko = biko 🍚." />
+        <meta property="og:image" content="/biko/high.jpg" />
+      </Head>
       <Link href="/">Back</Link>
       <h1 className="text-[2rem]">aiko hell yeah 👋🏽</h1>
       <div className="flex items-center gap-5 mt-24">
