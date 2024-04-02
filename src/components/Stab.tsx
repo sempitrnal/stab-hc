@@ -11,8 +11,14 @@ import {
   Bloom,
   ChromaticAberration,
   EffectComposer,
+  FXAA,
+  Glitch,
   GodRays,
   LensFlare,
+  SMAA,
+  SelectiveBloom,
+  TiltShift,
+  TiltShift2,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { useRef } from "react";
@@ -81,7 +87,7 @@ const Stab = () => {
       }}
     >
       <OrbitControls
-        autoRotate
+        // autoRotate
         autoRotateSpeed={1}
         maxDistance={1}
         minDistance={0.7}
@@ -97,10 +103,13 @@ const Stab = () => {
       <StabLogo />
       {/* <Box /> */}
       <EffectComposer>
-        <Bloom intensity={0.5} />
+        <FXAA samples={16} />
+        <SMAA />
+        <SelectiveBloom intensity={1} />
+        {/* <Bloom intensity={0.2} /> */}
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
-          offset={[0.0012, 0.0012]}
+          offset={[0.005, 0.002]}
         />
       </EffectComposer>
     </Canvas>
