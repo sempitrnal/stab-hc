@@ -87,7 +87,7 @@ const Stab = () => {
       }}
     >
       <OrbitControls
-        // autoRotate
+        autoRotate
         autoRotateSpeed={1}
         maxDistance={1}
         minDistance={0.7}
