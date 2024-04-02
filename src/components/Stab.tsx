@@ -97,7 +97,7 @@ const Stab = () => {
       <StabLogo />
       {/* <Box /> */}
       <EffectComposer>
-        <Bloom mipmapBlur intensity={0.5} />
+        <Bloom intensity={0.5} />
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
           offset={[0.0012, 0.0012]}
