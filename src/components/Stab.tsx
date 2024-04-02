@@ -105,7 +105,7 @@ const Stab = () => {
       <EffectComposer>
         <FXAA samples={16} />
         <SMAA />
-        <SelectiveBloom intensity={1} />
+        <SelectiveBloom mipmapBlur intensity={1} />
         {/* <Bloom intensity={0.2} /> */}
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
