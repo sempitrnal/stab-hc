@@ -42,6 +42,7 @@ const StabLogo = () => {
           // Set the color of the material
           child.material.color.set(bloomColor);
           child.material.metalness = 1;
+          child.material.roughness = 0.25;
           child.material.toneMapped = false;
           //   child.material.roughness = 0.4;
           //   child.material.envMapIntensity = 0.5;
@@ -106,7 +107,7 @@ const Stab = () => {
       <EffectComposer>
         <FXAA samples={16} />
         <SMAA />
-        <SelectiveBloom mipmapBlur intensity={0.5} />
+        {/* <SelectiveBloom mipmapBlur intensity={0.5} /> */}
         {/* <Bloom intensity={0.2} /> */}
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
