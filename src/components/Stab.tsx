@@ -1,17 +1,29 @@
-// @ts-nocheck
 import {
+  MeshReflectorMaterial,
   OrbitControls,
   PivotControls,
   shaderMaterial,
 } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useLoader } from "@react-three/fiber";
+import {
+  Bloom,
+  ChromaticAberration,
+  EffectComposer,
+  GodRays,
+  LensFlare,
+} from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
+import { useRef } from "react";
+import { Color, HemisphereLight } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const StabLogo = () => {
   // useFrame((state, delta) => {
   //   gltf.scene.rotation.y += 0.005;
   // });
+  const bloomColor = new Color("#9679ff");
+  bloomColor.multiplyScalar(2);
   const gltf = useLoader(GLTFLoader, "/stab-logo.glb");
 
   gltf.scene.position.set(0.24, 0, -0.5);
@@ -21,9 +33,13 @@ const StabLogo = () => {
         // Check if the mesh has a material
         if (child.material) {
           // Set the color of the material
-          child.material.color.set(color);
+          child.material.color.set(bloomColor);
           child.material.metalness = 1;
-          child.material.roughness = 0;
+          //   child.material.roughness = 0.4;
+          //   child.material.envMapIntensity = 0.5;
+          //   child.material.resolution = 1025;
+          //   child.material.mixStrength = 0.5;
+          child.material.mirror = 1;
         }
       }
     });
@@ -40,9 +56,18 @@ const StabLogo = () => {
 };
 const Box = () => {
   return (
-    <mesh position={[1, 0, 2]}>
+    <mesh position={[0, 0, 0]} scale={[0.5, 0.5, 0.5]} castShadow receiveShadow>
       <boxGeometry />
-      <meshStandardMaterial color="hotpink" />
+      <MeshReflectorMaterial
+        color="#9679ff"
+        metalness={1}
+        roughness={0.7}
+        dithering
+        mixStrength={80}
+        resolution={1024}
+        mirror={0}
+        mixContrast={1}
+      />
     </mesh>
   );
 };
@@ -54,15 +79,29 @@ const Stab = () => {
         height: "150px",
       }}
     >
-      <directionalLight position={[0.5, -0, 1]} intensity={3000} />
-
-      <StabLogo />
       <OrbitControls
-        autoRotate
+        // autoRotate
         autoRotateSpeed={2}
         maxDistance={1}
         minDistance={0.7}
-      />
+      />{" "}
+      <directionalLight position={[-1, 1.5, 6]} intensity={0.05} />
+      <directionalLight position={[-3.5, 0.5, 5]} intensity={0.15} />
+      <directionalLight position={[2, 0, 5]} intensity={0.1} />
+      <directionalLight position={[-1, -0.5, 5]} intensity={0.1} />
+      <directionalLight position={[3, 1, 5]} intensity={0.1} />
+      <directionalLight position={[50, -100, -2000]} intensity={0.1} />
+      <directionalLight position={[40, -100, -1000]} intensity={0.1} />
+      <directionalLight position={[40, -100, -10]} intensity={0.1} />
+      <StabLogo />
+      {/* <Box /> */}
+      <EffectComposer>
+        <Bloom mipmapBlur intensity={1.5} />
+        <ChromaticAberration
+          blendFunction={BlendFunction.NORMAL}
+          offset={[0.0009, 0.001]}
+        />
+      </EffectComposer>
     </Canvas>
   );
 };
