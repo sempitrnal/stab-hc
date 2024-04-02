@@ -81,8 +81,8 @@ const Stab = () => {
       }}
     >
       <OrbitControls
-        // autoRotate
-        autoRotateSpeed={2}
+        autoRotate
+        autoRotateSpeed={1}
         maxDistance={1}
         minDistance={0.7}
       />{" "}
@@ -97,10 +97,10 @@ const Stab = () => {
       <StabLogo />
       {/* <Box /> */}
       <EffectComposer>
-        {/* <Bloom mipmapBlur intensity={1.5} /> */}
+        <Bloom mipmapBlur intensity={0.5} />
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
-          offset={[0.0009, 0.001]}
+          offset={[0.0012, 0.0012]}
         />
       </EffectComposer>
     </Canvas>
