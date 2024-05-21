@@ -189,7 +189,7 @@ const Home = ({ metadata }: { metadata: any }) => {
     </motion.div>
   );
 };
-export async function getStaticProps(context: any) {
+export async function getServerSideProps() {
   const metadata = await fetchMetadata();
 
   if (!metadata) {
@@ -202,7 +202,6 @@ export async function getStaticProps(context: any) {
     props: {
       metadata,
     },
-    revalidate: 10, // revalidate at most once every 10 seconds
   };
 }
 
