@@ -48,7 +48,7 @@ export async function fetchMetadata() {
     ],
   };
 }
-const Home = ({ metadata }) => {
+const Home = ({ metadata }: { metadata: any }) => {
   console.log(metadata);
   const [seo, setSeo] = useState<any>();
   async function fetchDescription() {
@@ -184,7 +184,7 @@ const Home = ({ metadata }) => {
     </motion.div>
   );
 };
-export async function getStaticProps(context) {
+export async function getStaticProps(context: any) {
   const metadata = await fetchMetadata();
 
   if (!metadata) {
