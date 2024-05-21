@@ -21,6 +21,17 @@ const Loading = () => {
   );
 };
 const Home = () => {
+  const [seo, setSeo] = useState<any>();
+  async function fetchDescription() {
+    const res = await fetch(
+      "https://664ca01635bbda1098812dc2.mockapi.io/products"
+    );
+    const data = await res.json();
+    setSeo(data[0]);
+  }
+  useEffect(() => {
+    fetchDescription();
+  }, []);
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
@@ -47,6 +58,7 @@ const Home = () => {
     setPlaying(true);
     // Do whatever you need to do when audio finishes playing
   };
+  if (!seo) return <Loading />;
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -55,21 +67,11 @@ const Home = () => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>stab.cult</title>
-        <meta
-          name="description"
-          content="stab is a brutal hardcore band
-            with relentless energy and unapologetic intensity, we deliver a raw
-            and powerful sound that hits hard and leaves a lasting impression."
-        />
-        <meta property="og:title" content="stab.cult | juana osmeña hardcore" />
-        <meta
-          property="og:description"
-          content="stab is a brutal hardcore band
-            with relentless energy and unapologetic intensity, we deliver a raw
-            and powerful sound that hits hard and leaves a lasting impression."
-        />
-        <meta property="og:image" content="/dead.jpg" />
+        <title>{seo.title}</title>
+        <meta name="description" content={seo.description} />
+        <meta property="og:title" content={seo.title} />
+        <meta property="og:description" content={seo.description} />
+        <meta property="og:image" content={seo.img} />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
       </Head>
       <Suspense fallback={<Loading />}>
