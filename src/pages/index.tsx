@@ -20,7 +20,36 @@ const Loading = () => {
     </div>
   );
 };
-const Home = () => {
+export async function fetchMetadata() {
+  const response = await fetch(
+    `https://664ca01635bbda1098812dc2.mockapi.io/products`
+  );
+  const data = await response.json();
+
+  if (data.length === 0) {
+    return null;
+  }
+
+  const product = data[0];
+
+  return {
+    pageTitle: product.title,
+    pageDescription: product.description,
+
+    otherMetaTags: [
+      { property: "og:title", content: product.title },
+      { property: "og:description", content: product.description },
+      { property: "og:image", content: product.img },
+      { property: "og:type", content: "product" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: product.title },
+      { name: "twitter:description", content: product.description },
+      { name: "twitter:image", content: product.img },
+    ],
+  };
+}
+const Home = ({ metadata }) => {
+  console.log(metadata);
   const [seo, setSeo] = useState<any>();
   async function fetchDescription() {
     const res = await fetch(
@@ -155,5 +184,21 @@ const Home = () => {
     </motion.div>
   );
 };
+export async function getStaticProps(context) {
+  const metadata = await fetchMetadata();
+
+  if (!metadata) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      metadata,
+    },
+    revalidate: 10, // revalidate at most once every 10 seconds
+  };
+}
 
 export default Home;
