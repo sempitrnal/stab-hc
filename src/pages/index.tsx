@@ -50,6 +50,11 @@ export async function fetchMetadata() {
 }
 const Home = ({ metadata }: { metadata: any }) => {
   console.log(metadata);
+  const ogImageTag = metadata.otherMetaTags.find(
+    (tag: any) => tag.property === "og:image"
+  );
+  const ogImageUrl = ogImageTag.content;
+  console.log(ogImageUrl);
   const [seo, setSeo] = useState<any>();
   async function fetchDescription() {
     const res = await fetch(
@@ -96,11 +101,11 @@ const Home = ({ metadata }: { metadata: any }) => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>{seo.title}</title>
-        <meta name="description" content={seo.description} />
-        <meta property="og:title" content={seo.title} />
-        <meta property="og:description" content={seo.description} />
-        <meta property="og:image" content={seo.img} />
+        <title>{metadata.pageTitle}</title>
+        <meta name="description" content={metadata.pageDescription} />
+        <meta property="og:title" content={metadata.pageTitle} />
+        <meta property="og:description" content={metadata.pageDescription} />
+        <meta property="og:image" content={ogImageUrl} />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
       </Head>
       <Suspense fallback={<Loading />}>
