@@ -11,6 +11,9 @@ import {
   FaInstagram,
   FaSpotify,
 } from "react-icons/fa";
+import { GET_HOMEPAGE, getHomepage } from "../../lib/api";
+import { useQuery } from "@apollo/client";
+import { GetStaticProps } from "next";
 const Loading = () => {
   return (
     <div className="w-full h-[150px] flex justify-center items-center">
@@ -20,7 +23,7 @@ const Loading = () => {
     </div>
   );
 };
-const Home = () => {
+const Home = ({ home }: { home: any }) => {
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
@@ -47,6 +50,10 @@ const Home = () => {
     setPlaying(true);
     // Do whatever you need to do when audio finishes playing
   };
+
+  // const { data, loading, error } = useQuery(GET_HOMEPAGE);
+  // if (loading) return <Loading />;
+  // console.log(data);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -55,19 +62,12 @@ const Home = () => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>stab.cult</title>
-        <meta
-          name="description"
-          content="stab is a brutal hardcore band
-            with relentless energy and unapologetic intensity, we deliver a raw
-            and powerful sound that hits hard and leaves a lasting impression."
-        />
-        <meta property="og:title" content="stab.cult | juana osmeña hardcore" />
+        <title>{home.seo.title}</title>
+        <meta name="description" content={home.homepageFields.subtitle} />
+        <meta property="og:title" content={home.seo.title} />
         <meta
           property="og:description"
-          content="stab is a brutal hardcore band
-            with relentless energy and unapologetic intensity, we deliver a raw
-            and powerful sound that hits hard and leaves a lasting impression."
+          content={home.homepageFields.subtitle}
         />
         <meta property="og:image" content="/dead.jpg" />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
@@ -82,7 +82,7 @@ const Home = () => {
             juana osmeña hardcore
           </p>
           <p className="text-sm leading-loose tracking-widest lowercase">
-            <span className="font-bold">stab </span> is a brutal hardcore band
+            <span className="font-bold">stab </span> is a heavy hardcore band
             with relentless energy and unapologetic intensity, we deliver a raw
             and powerful sound that hits hard and leaves a lasting impression.
             Our lineup includes <span className="font-bold">Irish</span> on
@@ -152,6 +152,15 @@ const Home = () => {
       <div className="mt-10 text-xs">made by bo, hells yeah!</div>
     </motion.div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await getHomepage();
+  console.log(data);
+  return {
+    props: { home: data },
+    revalidate: 10,
+  };
 };
 
 export default Home;
