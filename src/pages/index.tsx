@@ -20,52 +20,7 @@ const Loading = () => {
     </div>
   );
 };
-export async function fetchMetadata() {
-  const response = await fetch(
-    `https://664ca01635bbda1098812dc2.mockapi.io/products`
-  );
-  const data = await response.json();
-
-  if (data.length === 0) {
-    return null;
-  }
-
-  const product = data[0];
-
-  return {
-    pageTitle: product.title,
-    pageDescription: product.description,
-
-    otherMetaTags: [
-      { property: "og:title", content: product.title },
-      { property: "og:description", content: product.description },
-      { property: "og:image", content: product.img },
-      { property: "og:type", content: "product" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: product.title },
-      { name: "twitter:description", content: product.description },
-      { name: "twitter:image", content: product.img },
-    ],
-  };
-}
-const Home = ({ metadata }: { metadata: any }) => {
-  console.log(metadata);
-  const ogImageTag = metadata.otherMetaTags.find(
-    (tag: any) => tag.property === "og:image"
-  );
-  const ogImageUrl = ogImageTag.content;
-  console.log(ogImageUrl);
-  const [seo, setSeo] = useState<any>();
-  async function fetchDescription() {
-    const res = await fetch(
-      "https://664ca01635bbda1098812dc2.mockapi.io/products"
-    );
-    const data = await res.json();
-    setSeo(data[0]);
-  }
-  useEffect(() => {
-    fetchDescription();
-  }, []);
+const Home = () => {
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
@@ -92,7 +47,6 @@ const Home = ({ metadata }: { metadata: any }) => {
     setPlaying(true);
     // Do whatever you need to do when audio finishes playing
   };
-  if (!seo) return <Loading />;
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -101,11 +55,21 @@ const Home = ({ metadata }: { metadata: any }) => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>{metadata.pageTitle}</title>
-        <meta name="description" content={metadata.pageDescription} />
-        <meta property="og:title" content={metadata.pageTitle} />
-        <meta property="og:description" content={metadata.pageDescription} />
-        <meta property="og:image" content={ogImageUrl} />
+        <title>stab.cult</title>
+        <meta
+          name="description"
+          content="stab is a brutal hardcore band
+            with relentless energy and unapologetic intensity, we deliver a raw
+            and powerful sound that hits hard and leaves a lasting impression."
+        />
+        <meta property="og:title" content="stab.cult | juana osmeña hardcore" />
+        <meta
+          property="og:description"
+          content="stab is a brutal hardcore band
+            with relentless energy and unapologetic intensity, we deliver a raw
+            and powerful sound that hits hard and leaves a lasting impression."
+        />
+        <meta property="og:image" content="/dead.jpg" />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
       </Head>
       <Suspense fallback={<Loading />}>
@@ -189,20 +153,5 @@ const Home = ({ metadata }: { metadata: any }) => {
     </motion.div>
   );
 };
-export async function getServerSideProps() {
-  const metadata = await fetchMetadata();
-
-  if (!metadata) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      metadata,
-    },
-  };
-}
 
 export default Home;
