@@ -14,6 +14,7 @@ import {
 import { GET_HOMEPAGE, getHomepage } from "../../lib/api";
 import { useQuery } from "@apollo/client";
 import { GetStaticProps } from "next";
+import { withAuthConsumerAnonMixed } from "../../hoc/WithAuthConsumerAnonMixed";
 const Loading = () => {
   return (
     <div className="w-full h-[150px] flex justify-center items-center">
@@ -163,4 +164,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default Home;
+export default withAuthConsumerAnonMixed(Home);
