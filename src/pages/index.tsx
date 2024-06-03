@@ -1,21 +1,16 @@
 import Stab from "@/components/Stab";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Head from "next/head";
+import Image from "next/image";
 import { Suspense, useEffect, useRef, useState } from "react";
 import {
-  FaPlay,
-  FaPause,
-  FaFacebook,
   FaFacebookSquare,
-  FaInstagramSquare,
   FaInstagram,
+  FaPause,
+  FaPlay,
   FaSpotify,
 } from "react-icons/fa";
-import { GET_HOMEPAGE, getHomepage } from "../../lib/api";
-import { useQuery } from "@apollo/client";
-import { GetStaticProps } from "next";
 import { withAuthConsumerAnonMixed } from "../../hoc/WithAuthConsumerAnonMixed";
-import Image from "next/image";
 const Loading = () => {
   return (
     <div className="w-full h-[150px] flex justify-center items-center">
@@ -25,7 +20,7 @@ const Loading = () => {
     </div>
   );
 };
-const Home = ({ home }: { home: any }) => {
+const Home = () => {
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
@@ -158,15 +153,6 @@ const Home = ({ home }: { home: any }) => {
       <div className="mt-10 text-xs">made by bo, hells yeah!</div>
     </motion.div>
   );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const data = await getHomepage();
-  console.log(data);
-  return {
-    props: { home: data },
-    revalidate: 10,
-  };
 };
 
 export default withAuthConsumerAnonMixed(Home);
