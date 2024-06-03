@@ -15,6 +15,7 @@ import { GET_HOMEPAGE, getHomepage } from "../../lib/api";
 import { useQuery } from "@apollo/client";
 import { GetStaticProps } from "next";
 import { withAuthConsumerAnonMixed } from "../../hoc/WithAuthConsumerAnonMixed";
+import Image from "next/image";
 const Loading = () => {
   return (
     <div className="w-full h-[150px] flex justify-center items-center">
@@ -30,7 +31,7 @@ const Home = ({ home }: { home: any }) => {
   useEffect(() => {
     const audio = ref.current;
     if (audio) {
-      audio.volume = 0.1;
+      audio.volume = 1;
       // audio.play();
       // setPlaying(true);
       // Add event listener for when audio ends
@@ -63,12 +64,19 @@ const Home = ({ home }: { home: any }) => {
     >
       <audio ref={ref} src="/yea.m4a"></audio>
       <Head>
-        <title>{home.seo.title}</title>
-        <meta name="description" content={home.homepageFields.subtitle} />
-        <meta property="og:title" content={home.seo.title} />
+        <title>stab.cult</title>
+        <meta
+          name="description"
+          content="stab is a heavy hardcore band
+            with relentless energy and unapologetic intensity, we deliver a raw
+            and powerful sound that hits hard and leaves a lasting impression."
+        />
+        <meta property="og:title" content="stab.cult" />
         <meta
           property="og:description"
-          content={home.homepageFields.subtitle}
+          content="stab is a heavy hardcore band
+          with relentless energy and unapologetic intensity, we deliver a raw
+          and powerful sound that hits hard and leaves a lasting impression."
         />
         <meta property="og:image" content="/dead.jpg" />
         <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
@@ -76,7 +84,7 @@ const Home = ({ home }: { home: any }) => {
       <Suspense fallback={<Loading />}>
         <Stab />
       </Suspense>
-
+      <Image src={"/arxan.jpg"} width={250} height={250} alt="500" />
       <div className="w-full md:w-[30rem] px-10  md:px-0 mt-5">
         <div className="flex flex-col items-center gap-8 font-mono text-justify">
           <p className="px-3 text-lg leading-loose tracking-widest text-center border rounded-md w-max ">
@@ -144,7 +152,7 @@ const Home = ({ home }: { home: any }) => {
           className="text-[2rem] text-black cursor-pointer transition-all duration-300 hover:text-stone-800"
           onClick={() => {
             window.open(
-              "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8?si=46763bd7772543d1",
+              "https://open.spotify.com/artist/7sCkooThtWgYUNIp07b73f?si=v_jKMjBTQ-iyB5W_8enL7A",
               "_blank"
             );
           }}
