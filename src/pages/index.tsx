@@ -104,9 +104,6 @@ const Home = ({ home }: { home: any }) => {
             {"it's "}a way of life. {"It's"} about resilience, passion, and
             standing up for what you believe in, no matter the odds.
           </p>
-          <p className="text-xs leading-loose tracking-widest">
-            be yourself lang maws
-          </p>
         </div>
       </div>
       <div className="flex items-center justify-center gap-2 mt-16">
