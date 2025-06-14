@@ -1,6 +1,7 @@
 "use client";
 
 import OrdersTable from "@/components/OrdersTable";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Orders = () => {
@@ -57,25 +58,32 @@ const Orders = () => {
         <OrdersTable search={search} setSearch={setSearch} orders={orders} />
       )}
 
-      <div className="p-4 bg-white border rounded shadow">
-        <h2 className="mb-2 text-lg font-semibold">Item Tally</h2>
-        <ul>
+      <div className="p-6 bg-white ">
+        <h2 className="mb-10 text-lg font-semibold">Item Tally</h2>
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
           {Object.entries(itemTally).map(([key, { quantity, image }]) => {
             const [name, size, color] = key.split("||");
 
             return (
-              <li key={key} className="flex items-center gap-4 mb-2">
-                <img
+              <li
+                key={key}
+                className="flex items-start gap-4 bg-white rounded "
+              >
+                <Image
+                  width={100}
+                  height={100}
                   src={image}
                   alt={name}
-                  className="object-cover w-12 h-12 rounded"
+                  className="object-cover rounded"
                 />
-                <div>
-                  <p className="font-medium">{name}</p>
+                <div className="flex flex-col">
+                  <p className="font-medium lowercase">{name}</p>
                   <p className="text-sm text-gray-600 lowercase">
                     {size} – {color}
                   </p>
-                  <p className="text-sm font-semibold">{quantity} pcs</p>
+                  <p className="text-sm font-semibold">
+                    {quantity} {quantity > 1 ? "pcs" : "pc"}
+                  </p>
                 </div>
               </li>
             );

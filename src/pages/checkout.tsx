@@ -83,6 +83,7 @@ const CheckoutPage = () => {
             quantity: i.quantity,
             price: i.price,
             image: i.image,
+            color: i.color,
           })),
           proof: uploadedFile.id,
         },
@@ -100,6 +101,7 @@ const CheckoutPage = () => {
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
+      setLoading(false);
     }
   };
   return (
@@ -113,7 +115,7 @@ const CheckoutPage = () => {
       <Head>
         <title className="lowecase">Checkout | stab.cult merch</title>
       </Head>
-      {items.length === 0 ? (
+      {items.length === 0 && !loading ? (
         <div className="flex flex-col items-center justify-center w-full ">
           <h1 className="text-2xl font-bold text-center">Your cart is empty</h1>
           <p className="mt-2 text-gray-500">
@@ -262,7 +264,7 @@ const CheckoutPage = () => {
                   handleFile(e.dataTransfer.files);
                 }}
                 onDragOver={(e) => e.preventDefault()}
-                className="w-full p-4 text-sm text-center text-gray-500 transition border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-black"
+                className={`w-full p-4 text-sm text-center text-gray-500 transition border-2 border-gray-300 border-dashed rounded-md ${loading ? "cursor-not-allowed" : "cursor-pointer hover:border-black"}`}
                 onClick={() => document.getElementById("proofInput")?.click()}
               >
                 {proofFile ? (

@@ -43,21 +43,23 @@ const OrdersTable = ({
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left border border-gray-200">
           <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 border">Name</th>
-              <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Contact</th>
-              <th className="px-4 py-2 border">Delivery</th>
-              <th className="px-4 py-2 border">Payment</th>
-              <th className="px-4 py-2 border">Total</th>
-              <th className="px-4 py-2 border">Items</th>
-              <th className="px-4 py-2 border">Proof</th>
+            <tr className="font-light">
+              <th className="px-4 py-2 font-normal border">Order ID</th>
+              <th className="px-4 py-2 font-normal border">Name</th>
+              <th className="px-4 py-2 font-normal border">Email</th>
+              <th className="px-4 py-2 font-normal border">Contact</th>
+              <th className="px-4 py-2 font-normal border">Delivery</th>
+              <th className="px-4 py-2 font-normal border">Payment</th>
+              <th className="px-4 py-2 font-normal border">Total</th>
+              <th className="px-4 py-2 font-normal border">Items</th>
+              <th className="px-4 py-2 font-normal border">Proof</th>
             </tr>
           </thead>
           <tbody>
             {orders.length > 0 ? (
               orders.map((order, idx) => (
                 <tr key={idx} className="border-t">
+                  <td className="px-4 py-2">{order.orderId}</td>
                   <td className="px-4 py-2">
                     {order.firstName} {order.lastName}
                   </td>
@@ -83,9 +85,24 @@ const OrdersTable = ({
                   <td className="px-4 py-2">₱{order.total.toFixed(2)}</td>
                   <td className="px-4 py-2">
                     {order.items?.map((item: any, i: any) => (
-                      <div key={i}>
-                        {item.name} ({item.size}) x{item.quantity} - ₱
-                        {item.price.toFixed(2)}
+                      <div key={i} className="flex items-center gap-2">
+                        <Image width={60} height={60} alt="" src={item.image} />
+                        <div className="flex flex-col">
+                          <p className="font-light lowercase">{item.name}</p>
+                          <p className="text-xs font-light uppercase text-stone-500">
+                            {item.color}
+                          </p>
+                          <p className="text-xs font-light uppercase text-stone-500">
+                            x{item.quantity}
+                          </p>
+                          <p className="text-xs font-light lowercase text-stone-500">
+                            ₱
+                            {new Intl.NumberFormat("en-PH", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }).format(item.price * item.quantity)}
+                          </p>
+                        </div>
                       </div>
                     ))}
                   </td>
