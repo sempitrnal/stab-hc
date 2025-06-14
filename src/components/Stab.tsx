@@ -1,28 +1,15 @@
 // @ts-nocheck
+import { MeshReflectorMaterial, OrbitControls } from "@react-three/drei";
+import { Canvas, useLoader } from "@react-three/fiber";
 import {
-  MeshReflectorMaterial,
-  OrbitControls,
-  PivotControls,
-  shaderMaterial,
-} from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useLoader } from "@react-three/fiber";
-import {
-  Bloom,
   ChromaticAberration,
   EffectComposer,
   FXAA,
-  Glitch,
-  GodRays,
-  LensFlare,
   SMAA,
-  SelectiveBloom,
-  TiltShift,
-  TiltShift2,
 } from "@react-three/postprocessing";
+import { useRouter } from "next/router";
 import { BlendFunction } from "postprocessing";
-import { useRef } from "react";
-import { Color, HemisphereLight } from "three";
+import { Color } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const StabLogo = () => {
@@ -73,7 +60,7 @@ const Box = () => {
         roughness={0.7}
         dithering
         mixStrength={80}
-        resolution={1024}
+        resolution={2048}
         mirror={0}
         mixContrast={1}
       />
@@ -81,40 +68,41 @@ const Box = () => {
   );
 };
 const Stab = () => {
+  const router = useRouter();
+
   return (
-    <Canvas
-      style={{
-        width: "100%",
-        height: "150px",
-      }}
+    <div
+      // onClick={() => router.push("/")}
+      className="h-[100px] w-[150px] md:h-[120px] md:w-[700px] sm:translate-x-[2.2rem]"
     >
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={1}
-        maxDistance={1}
-        minDistance={0.7}
-      />{" "}
-      <directionalLight position={[-1, 1.5, 6]} intensity={0.05} />
-      <directionalLight position={[-3.5, 0.5, 5]} intensity={0.15} />
-      <directionalLight position={[2, 0, 5]} intensity={0.1} />
-      <directionalLight position={[-1, -0.5, 5]} intensity={0.1} />
-      <directionalLight position={[3, 1, 5]} intensity={0.1} />
-      <directionalLight position={[50, -100, -2000]} intensity={0.1} />
-      <directionalLight position={[40, -100, -1000]} intensity={0.1} />
-      <directionalLight position={[40, -100, -10]} intensity={0.1} />
-      <StabLogo />
-      {/* <Box /> */}
-      <EffectComposer>
-        <FXAA samples={16} />
-        <SMAA />
-        {/* <SelectiveBloom mipmapBlur intensity={0.5} /> */}
-        {/* <Bloom intensity={0.2} /> */}
-        <ChromaticAberration
-          blendFunction={BlendFunction.NORMAL}
-          offset={[0.0015, 0.002]}
+      <Canvas style={{}}>
+        <OrbitControls
+          autoRotate
+          autoRotateSpeed={0.5}
+          maxDistance={1}
+          minDistance={0.7}
         />
-      </EffectComposer>
-    </Canvas>
+        <directionalLight position={[-1, 1.5, 6]} intensity={0.05} />
+        <directionalLight position={[-3.5, 0.5, 5]} intensity={0.15} />
+        <directionalLight position={[2, 0, 5]} intensity={0.1} />
+        <directionalLight position={[-1, -0.5, 5]} intensity={0.1} />
+        <directionalLight position={[3, 1, 5]} intensity={0.1} />
+        <directionalLight position={[50, -100, -2000]} intensity={0.1} />
+        <directionalLight position={[40, -100, -1000]} intensity={0.1} />
+        <directionalLight position={[40, -100, -10]} intensity={0.1} />
+        <StabLogo />
+        {/* <Box /> */}
+        <EffectComposer>
+          <FXAA samples={16} /> <SMAA />
+          {/* <SelectiveBloom mipmapBlur intensity={0.5} />
+        <Bloom intensity={0.2} /> */}
+          <ChromaticAberration
+            blendFunction={BlendFunction.NORMAL}
+            offset={[0.0015, 0.002]}
+          />
+        </EffectComposer>
+      </Canvas>
+    </div>
   );
 };
 
