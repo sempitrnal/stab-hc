@@ -93,7 +93,7 @@ const CheckoutPage = () => {
 
       // 3. Clear cart and redirect/confirm
       toast.success("Order placed successfully!");
-      router.push(`/order-success?ref=test`, undefined, {
+      router.push(`/order-success?ref=${res.data.data.orderId}`, undefined, {
         scroll: false,
       });
       // await axios.post("/api/send-order-email", { order: res.data.data });
