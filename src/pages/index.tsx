@@ -42,7 +42,7 @@ const Home = ({ products }: { products: Product[] }) => {
       head={
         <Head>
           <title className="lowercase">
-            stab.cult merch store | Juana Osmeña Hardcore
+            stab.cult merch store | juana osmeña hardcore
           </title>
           <meta
             name="description"
@@ -66,7 +66,7 @@ const Home = ({ products }: { products: Product[] }) => {
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
-            content="stab.cult merch store | Juana Osmeña Hardcore"
+            content="stab.cult merch store | juana osmeña hardcore"
           />
           <meta
             name="twitter:description"
