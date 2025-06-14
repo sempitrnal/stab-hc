@@ -13,6 +13,7 @@ const Product = ({ product }: { product: Product[] }) => {
   const item = product[0];
   console.log(item.images[0]?.url);
   const [activeImage, setActiveImage] = useState(item.images[0]?.url);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
   const { items } = useCartStore();
@@ -41,7 +42,7 @@ const Product = ({ product }: { product: Product[] }) => {
         id: `${item.id}-${selectedSize}-${selectedColor}`,
         name: item.name,
         price: item.price,
-        image: item.images[0].url,
+        image: item.images[activeImageIndex].url,
         size: sizeName,
         color: colorName,
       },
@@ -68,8 +69,8 @@ const Product = ({ product }: { product: Product[] }) => {
   const description = `Get ${item.name.toLowerCase()} for ₱${item.price.toFixed(
     2
   )} — official stab.cult merch.`;
-  const imageUrl = item.images?.[0]?.url
-    ? item.images[0].url
+  const imageUrl = item.images?.[activeImageIndex]?.url
+    ? item.images[activeImageIndex].url
     : "https://stabcult.com/default-image.jpg"; // fallback image
 
   return (
@@ -184,6 +185,7 @@ const Product = ({ product }: { product: Product[] }) => {
                       onClick={() => {
                         setSelectedColor(color.key);
                         setActiveImage(item.images[idx].url); // ← use index to set image
+                        setActiveImageIndex(idx);
                       }}
                       className={`flex items-center gap-2 px-3 py-1 border rounded lowercase ${
                         selectedColor === color.key

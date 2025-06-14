@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 const CheckoutPage = () => {
   const items = useCartStore((s) => s.items);
+  console.log(items);
   const total = useCartStore((s) => s.totalPrice());
   const hasHydrated = useHasHydrated();
   const router = useRouter();
@@ -151,6 +152,7 @@ const CheckoutPage = () => {
                     First Name
                   </label>
                   <input
+                    disabled={loading}
                     type="text"
                     value={form.firstName}
                     onChange={(e) =>
@@ -172,6 +174,7 @@ const CheckoutPage = () => {
                     Last Name
                   </label>
                   <input
+                    disabled={loading}
                     type="text"
                     value={form.lastName}
                     onChange={(e) =>
@@ -193,6 +196,7 @@ const CheckoutPage = () => {
                     Email
                   </label>
                   <input
+                    disabled={loading}
                     value={form.email}
                     onChange={(e) =>
                       setForm({ ...form, email: e.target.value })
@@ -214,6 +218,7 @@ const CheckoutPage = () => {
                     Contact Number
                   </label>
                   <input
+                    disabled={loading}
                     value={form.contactNumber}
                     onChange={(e) =>
                       setForm({ ...form, contactNumber: e.target.value })
@@ -237,6 +242,7 @@ const CheckoutPage = () => {
                       <input
                         type="radio"
                         name="payment"
+                        disabled={loading}
                         value={form.paymentMethod}
                         checked={form.paymentMethod === method}
                         onChange={() =>
@@ -273,6 +279,7 @@ const CheckoutPage = () => {
                   id="proofInput"
                   type="file"
                   name="proof"
+                  disabled={loading}
                   accept="image/*,application/pdf"
                   onChange={(e) => handleFile(e.target.files)}
                   className="hidden"
@@ -285,6 +292,7 @@ const CheckoutPage = () => {
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2">
                     <input
+                      disabled={loading}
                       type="radio"
                       name="delivery"
                       value="pickup"
@@ -323,6 +331,7 @@ const CheckoutPage = () => {
                       Street Address
                     </label>
                     <input
+                      disabled={loading}
                       value={form.address.street}
                       onChange={(e) =>
                         setForm({
@@ -347,6 +356,7 @@ const CheckoutPage = () => {
                       Barangay
                     </label>
                     <input
+                      disabled={loading}
                       value={form.address.barangay}
                       onChange={(e) =>
                         setForm({
@@ -375,6 +385,7 @@ const CheckoutPage = () => {
                         City / Municipality
                       </label>
                       <input
+                        disabled={loading}
                         value={form.address.city}
                         onChange={(e) =>
                           setForm({
@@ -398,6 +409,7 @@ const CheckoutPage = () => {
                         Province
                       </label>
                       <input
+                        disabled={loading}
                         value={form.address.province}
                         onChange={(e) =>
                           setForm({
@@ -426,6 +438,7 @@ const CheckoutPage = () => {
                       ZIP Code
                     </label>
                     <input
+                      disabled={loading}
                       value={form.address.zip}
                       onChange={(e) =>
                         setForm({

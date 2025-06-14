@@ -29,16 +29,26 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const { search } = req.query;
-      const ref = req.query.ref as string;
-      const strapiRes = await axios.get(
-        `   ${process.env.STRAPI_URL}/api/orders?filters[orderId][$eq]=${ref}&populate=*`,
-        {
-          headers: {
-            "x-api-secret": process.env.API_SECRET!,
-          },
-        }
-      );
+      const { search, ref } = req.query;
+
+      let url = `${process.env.STRAPI_URL}/api/orders?populate=*`;
+
+      if (ref) {
+        url += `&filters[orderId][$eq]=${ref}`;
+      } else if (search) {
+        const params = new URLSearchParams({
+          "filters[$or][0][firstName][$containsi]": String(search),
+          "filters[$or][1][lastName][$containsi]": String(search),
+          "filters[$or][2][email][$containsi]": String(search),
+        });
+        url += `&${params.toString()}`;
+      }
+
+      const strapiRes = await axios.get(url, {
+        headers: {
+          "x-api-secret": process.env.API_SECRET!,
+        },
+      });
 
       return res.status(200).json(strapiRes.data);
     } catch (error: any) {

@@ -21,7 +21,7 @@ const Orders = () => {
             }).toString()
           : "";
 
-        const res = await fetch(`${baseUrl}/api/orders?${query}&populate=*`);
+        const res = await fetch(`/api/orders?${query}&populate=*`, {});
         const json = await res.json();
         setOrders(json.data);
         setLoading(false);
@@ -32,14 +32,22 @@ const Orders = () => {
 
     fetchOrders(search);
   }, [search]);
-  const itemTally: Record<string, number> = {};
-
+  const itemTally: Record<string, { quantity: number; image: string }> = {};
   orders.forEach((order: any) => {
     order.items.forEach((item: any) => {
-      const key = `${item.name}||${item.size}`;
-      itemTally[key] = (itemTally[key] || 0) + item.quantity;
+      const key = `${item.name}||${item.size}||${item.color}`;
+      if (itemTally[key]) {
+        itemTally[key].quantity += item.quantity;
+      } else {
+        itemTally[key] = {
+          quantity: item.quantity,
+          image: item.image,
+        };
+      }
     });
   });
+  console.log(orders);
+
   return (
     <div className="p-6">
       <h1 className="mb-4 text-3xl font-bold">Orders</h1>
@@ -51,12 +59,24 @@ const Orders = () => {
 
       <div className="p-4 bg-white border rounded shadow">
         <h2 className="mb-2 text-lg font-semibold">Item Tally</h2>
-        <ul className="text-sm list-disc list-inside">
-          {Object.entries(itemTally).map(([key, quantity]) => {
-            const [name, size] = key.split("||");
+        <ul>
+          {Object.entries(itemTally).map(([key, { quantity, image }]) => {
+            const [name, size, color] = key.split("||");
+
             return (
-              <li key={key}>
-                {name} - {size}: {quantity}
+              <li key={key} className="flex items-center gap-4 mb-2">
+                <img
+                  src={image}
+                  alt={name}
+                  className="object-cover w-12 h-12 rounded"
+                />
+                <div>
+                  <p className="font-medium">{name}</p>
+                  <p className="text-sm text-gray-600 lowercase">
+                    {size} – {color}
+                  </p>
+                  <p className="text-sm font-semibold">{quantity} pcs</p>
+                </div>
               </li>
             );
           })}
