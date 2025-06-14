@@ -94,11 +94,11 @@ const CheckoutPage = () => {
       router.push(`/order-success?ref=${res.data.data.orderId}`, undefined, {
         scroll: false,
       });
-      await axios.post("/api/send-order-email", { order: res.data.data });
+      // await axios.post("/api/send-order-email", { order: res.data.data });
       useCartStore.getState().clearCart();
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
   return (
@@ -445,9 +445,14 @@ const CheckoutPage = () => {
 
               <button
                 type="submit"
-                className="w-full px-6 py-3 mt-6 text-white transition bg-black rounded md:w-auto hover:bg-gray-800"
+                disabled={loading}
+                className={`w-full px-6 py-3 mt-6 rounded md:w-auto transition ${
+                  loading
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-black hover:bg-gray-800 text-white"
+                }`}
               >
-                Confirm Order
+                {loading ? "Processing..." : "Confirm Order"}
               </button>
             </form>
           )}
