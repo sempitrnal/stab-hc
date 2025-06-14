@@ -83,7 +83,7 @@ const CheckoutPage = () => {
             price: i.price,
             image: i.image,
           })),
-          // proof: uploadedFile.id,
+          proof: uploadedFile.id,
         },
       };
 
