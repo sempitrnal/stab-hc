@@ -181,7 +181,10 @@ const Product = ({ product }: { product: Product[] }) => {
                   {item.color.map((color: any, idx: any) => (
                     <button
                       key={color.key}
-                      onClick={() => setSelectedColor(color.key)}
+                      onClick={() => {
+                        setSelectedColor(color.key);
+                        setActiveImage(item.images[idx].url); // ← use index to set image
+                      }}
                       className={`flex items-center gap-2 px-3 py-1 border rounded lowercase ${
                         selectedColor === color.key
                           ? "bg-black text-white border-black"
