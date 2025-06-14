@@ -448,7 +448,7 @@ const CheckoutPage = () => {
                 disabled={loading}
                 className={`w-full px-6 py-3 mt-6 rounded md:w-auto transition ${
                   loading
-                    ? "bg-gray-500 cursor-not-allowed"
+                    ? "bg-stone-400 text-white cursor-not-allowed"
                     : "bg-black hover:bg-gray-800 text-white"
                 }`}
               >
