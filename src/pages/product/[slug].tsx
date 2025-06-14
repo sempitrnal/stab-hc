@@ -2,6 +2,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import DefaultTemplate from "@/templates/default-template";
 import type { Product } from "@/types/product";
 import { motion } from "framer-motion";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -15,22 +16,41 @@ const Product = ({ product }: { product: Product[] }) => {
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
   const { items } = useCartStore();
-  const [selectedSize, setSelectedSize] = useState("md");
-  console.log(items);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  console.log(item.color);
+  console.log(selectedColor);
   const handleAddToCart = () => {
     const sizeName = item.size_chart[selectedSize]?.label;
+    const colorName = item.color?.find(
+      (color: any) => color.key === selectedColor
+    )?.name;
+    console.log(colorName);
+    if (!selectedSize || !sizeName) {
+      toast.error("Please select a size");
+      return;
+    }
+
+    if (!selectedColor || !colorName) {
+      toast.error("Please select a color");
+      return;
+    }
 
     addToCart(
       {
-        id: item.id.toString() + "-" + selectedSize,
+        id: `${item.id}-${selectedSize}-${selectedColor}`,
         name: item.name,
         price: item.price,
         image: item.images[0].url,
         size: sizeName,
+        color: colorName,
       },
       quantity
     );
-    toast.success(`Added ${item.name} (${sizeName}) x${quantity} to cart`);
+
+    toast.success(
+      `Added ${item.name} (${sizeName}, ${colorName}) x${quantity} to cart`
+    );
   };
   const [quantity, setQuantity] = useState(1);
   const [zoom, setZoom] = useState(false);
@@ -44,9 +64,41 @@ const Product = ({ product }: { product: Product[] }) => {
       </div>
     );
   }
+  const title = `${item.name.toLowerCase()} | stab.cult merch`;
+  const description = `Get ${item.name.toLowerCase()} for ₱${item.price.toFixed(
+    2
+  )} — official stab.cult merch.`;
+  const imageUrl = item.images?.[0]?.url
+    ? item.images[0].url
+    : "https://stabcult.com/default-image.jpg"; // fallback image
 
   return (
-    <DefaultTemplate>
+    <DefaultTemplate
+      head={
+        <Head>
+          <title className="lowercase">{title}</title>
+          <meta name="description" content={description} />
+
+          {/* Open Graph */}
+          <meta property="og:type" content="product" />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={description} />
+          <meta property="og:image" content={imageUrl} />
+          <meta
+            property="og:url"
+            content={`https://stabcult.com/product/${item.slug}`}
+          />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={title} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:image" content={imageUrl} />
+
+          <link rel="icon" href="/knife.ico" type="image/x-icon" />
+        </Head>
+      }
+    >
       <main className="w-full max-w-5xl min-h-screen p-4 mx-auto sm:p-8 md:px-12 md:py-8">
         <div
           className="flex items-center gap-2 mb-6 text-xl cursor-pointer row hover:text-gray-600"
@@ -122,6 +174,30 @@ const Product = ({ product }: { product: Product[] }) => {
             <p className="my-5 text-base text-gray-800 md:text-lg">
               {item.description}
             </p>
+            {item.color && Object.keys(item.color).length > 0 && (
+              <div className="flex flex-col gap-2 mt-6">
+                <span className="text-lg font-light">color</span>
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {item.color.map((color: any, idx: any) => (
+                    <button
+                      key={color.key}
+                      onClick={() => setSelectedColor(color.key)}
+                      className={`flex items-center gap-2 px-3 py-1 border rounded lowercase ${
+                        selectedColor === color.key
+                          ? "bg-black text-white border-black"
+                          : "border-gray-300 text-gray-800 hover:border-black"
+                      }`}
+                    >
+                      <span
+                        className="w-4 h-4 border rounded-full"
+                        style={{ backgroundColor: color.hex }}
+                      />
+                      {color.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex flex-col gap-2 mt-6">
               <span className="text-lg font-light">size</span>
               <div className="flex flex-wrap gap-2 mb-5">
@@ -140,36 +216,41 @@ const Product = ({ product }: { product: Product[] }) => {
                 ))}
               </div>
             </div>
-            {item.size_chart && (
-              <table className="w-full my-5 text-sm text-left lowercase border border-collapse border-gray-300 bg-yellow-50/10">
-                <thead className="text-xs tracking-wider text-gray-700 ">
-                  <tr>
-                    <th className="px-4 py-2 border border-gray-300">Size</th>
-                    <th className="px-4 py-2 border border-gray-300">
-                      Width (in)
-                    </th>
-                    <th className="px-4 py-2 border border-gray-300">
-                      Length (in)
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.values(item.size_chart).map((size, index) => (
-                    <tr key={index} className="text-gray-800">
-                      <td className="px-4 py-2 border border-gray-300">
-                        {size.label}
-                      </td>
-                      <td className="px-4 py-2 border border-gray-300">
-                        {size.width}
-                      </td>
-                      <td className="px-4 py-2 border border-gray-300">
-                        {size.length}
-                      </td>
+            {item.size_chart &&
+              Object.values(item.size_chart).some(
+                (size) => size.width && size.length
+              ) && (
+                <table className="w-full my-5 text-sm text-left lowercase border border-collapse border-gray-300 bg-yellow-50/10">
+                  <thead className="text-xs tracking-wider text-gray-700 ">
+                    <tr>
+                      <th className="px-4 py-2 border border-gray-300">Size</th>
+                      <th className="px-4 py-2 border border-gray-300">
+                        Width (in)
+                      </th>
+                      <th className="px-4 py-2 border border-gray-300">
+                        Length (in)
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                  </thead>
+                  <tbody>
+                    {Object.values(item.size_chart)
+                      .filter((size) => size.width && size.length)
+                      .map((size, index) => (
+                        <tr key={index} className="text-gray-800">
+                          <td className="px-4 py-2 border border-gray-300">
+                            {size.label}
+                          </td>
+                          <td className="px-4 py-2 border border-gray-300">
+                            {size.width}
+                          </td>
+                          <td className="px-4 py-2 border border-gray-300">
+                            {size.length}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              )}
             <div className="flex items-center gap-4 my-5">
               <span className="text-lg font-light">quantity</span>
               <div className="flex items-center border border-gray-300 rounded">

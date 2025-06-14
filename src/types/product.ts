@@ -76,5 +76,6 @@ export type Product = {
   slug: string;
   images: ProductImage[];
   preorder?: boolean;
+  color: any;
   preorderRelease: string | null;
 };

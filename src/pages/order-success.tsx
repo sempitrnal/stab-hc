@@ -1,4 +1,5 @@
 "use client";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,9 +17,7 @@ const OrderSuccess = () => {
 
     const fetchOrder = async () => {
       try {
-        const res = await fetch(
-          `${process.env.STRAPI_URL}/api/orders?filters[orderId][$eq]=${ref}&populate=*`
-        );
+        const res = await fetch(`/api/orders?ref=${ref}`);
         const data = await res.json();
         console.log(data);
         setOrder(data.data[0]); // assuming orderId is unique
@@ -35,6 +34,9 @@ const OrderSuccess = () => {
   if (loading) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center">
+        <Head>
+          <title className="lowercase">Order Success | stab.cult</title>
+        </Head>
         <p className="text-gray-500">Loading order details...</p>
       </div>
     );
@@ -43,6 +45,9 @@ const OrderSuccess = () => {
   if (!order) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center">
+        <Head>
+          <title className="lowercase">Order Success | stab.cult</title>
+        </Head>
         <p className="text-red-500">Order not found.</p>
       </div>
     );
@@ -52,6 +57,9 @@ const OrderSuccess = () => {
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-12 bg-[#fafafa]">
+      <Head>
+        <title className="lowercase">Order Success | stab.cult</title>
+      </Head>
       <div className="w-full max-w-md p-8 text-center bg-white border shadow-md rounded-xl">
         <FiCheckCircle className="mx-auto mb-4 text-5xl text-green-500" />
         <h1 className="mb-2 text-2xl font-bold">Order Placed Successfully</h1>

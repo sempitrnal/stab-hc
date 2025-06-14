@@ -1,6 +1,7 @@
 import { useCartStore } from "@/stores/useCartStore";
 import { useHasHydrated } from "@/stores/useHasHydrated";
 import axios from "axios";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -49,12 +50,9 @@ const CheckoutPage = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append("files", proofFile);
+      formData.append("proof", proofFile); // can be File or Blob
 
-      const uploadRes = await axios.post(
-        process.env.STRAPI_URL + "/api/upload",
-        formData
-      );
+      const uploadRes = await axios.post("/api/upload", formData);
       const uploadedFile = uploadRes.data[0]; // Get uploaded file ref
 
       // 2. Submit order to Strapi
@@ -85,20 +83,18 @@ const CheckoutPage = () => {
             price: i.price,
             image: i.image,
           })),
-          proof: uploadedFile.id,
+          // proof: uploadedFile.id,
         },
       };
 
-      const res = await axios.post(
-        process.env.STRAPI_URL + "/api/orders",
-        orderPayload
-      );
+      const res = await axios.post("/api/orders", orderPayload);
 
       // 3. Clear cart and redirect/confirm
       toast.success("Order placed successfully!");
       router.push(`/order-success?ref=${res.data.data.orderId}`, undefined, {
         scroll: false,
       });
+      await axios.post("/api/send-order-email", { order: res.data.data });
       useCartStore.getState().clearCart();
     } catch (err) {
       console.error(err);
@@ -109,10 +105,13 @@ const CheckoutPage = () => {
     <div
       className={`${
         items.length === 0
-          ? "flex row justify-center mt-20"
-          : "grid max-w-6xl grid-cols-1 gap-10  lg:grid-cols-3"
+          ? "flex flex-row justify-center mt-20"
+          : "flex flex-col-reverse lg:grid lg:grid-cols-3 lg:gap-10 lg:max-w-6xl"
       } p-6 mx-auto lowercase`}
     >
+      <Head>
+        <title className="lowecase">Checkout | stab.cult merch</title>
+      </Head>
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center w-full ">
           <h1 className="text-2xl font-bold text-center">Your cart is empty</h1>
@@ -139,7 +138,7 @@ const CheckoutPage = () => {
                 handleSubmit();
               }}
             >
-              <h1 className="mb-2 text-2xl font-bold">Checkout</h1>
+              <h1 className="mb-2 text-4xl font-light">Checkout</h1>
 
               {/* Customer Info */}
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -231,7 +230,7 @@ const CheckoutPage = () => {
 
               {/* Payment Method */}
               <div>
-                <h2 className="mb-2 font-semibold">Payment Method</h2>
+                <h2 className="mb-2 font-">Payment Method</h2>
                 <div className="flex gap-4">
                   {["gcash", "bank"].map((method) => (
                     <label key={method} className="flex items-center gap-2">
@@ -273,6 +272,7 @@ const CheckoutPage = () => {
                 <input
                   id="proofInput"
                   type="file"
+                  name="proof"
                   accept="image/*,application/pdf"
                   onChange={(e) => handleFile(e.target.files)}
                   className="hidden"
@@ -281,7 +281,7 @@ const CheckoutPage = () => {
 
               {/* Delivery Method */}
               <div>
-                <h2 className="mb-2 font-semibold">Delivery Option</h2>
+                <h2 className="mb-2 font-semibld">Delivery Option</h2>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2">
                     <input
@@ -453,14 +453,14 @@ const CheckoutPage = () => {
           )}
 
           {/* Right: Summary */}
-          <div className="p-2 bg-white md:p-6 h-fit">
-            <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
+          <div className="px-4 py-2 mb-10 bg-white border rounded md:p-6 h-fit">
+            <h2 className="mb-4 text-lg font-light">Order Summary</h2>
 
             <div className="space-y-4 overflow-y-auto max-h-96">
               {items.map((item) => (
                 <div
                   key={`${item.id}-${item.size}`}
-                  className="flex items-start gap-4 text-sm"
+                  className="flex items-center gap-4 text-sm"
                 >
                   {/* Image */}
                   <Image
@@ -474,14 +474,17 @@ const CheckoutPage = () => {
                   {/* Info and quantity */}
                   <div className="flex-1">
                     <p className="font-medium">{item.name}</p>
-                    <p className="text-xs text-gray-500">Size: {item.size}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 uppercase">
+                      {item.color}
+                    </p>
+                    <p className="text-xs text-gray-400">Size: {item.size}</p>
+                    <p className="text-xs text-gray-400">
                       Qty: {item.quantity}
                     </p>
                   </div>
 
                   {/* Price */}
-                  <div className="text-sm font-medium whitespace-nowrap">
+                  <div className="text-sm font-light whitespace-nowrap">
                     ₱
                     {new Intl.NumberFormat("en-PH", {
                       minimumFractionDigits: 2,
@@ -492,7 +495,7 @@ const CheckoutPage = () => {
               ))}
             </div>
 
-            <div className="flex justify-between pt-4 mt-4 text-base font-semibold border-t">
+            <div className="flex justify-between pt-4 mt-4 text-base border-t font-">
               <span>Total</span>
               <span>
                 ₱

@@ -63,7 +63,10 @@ const CartDrawer = () => {
                         <p className="font-light lowercase text-normal">
                           {item.name}
                         </p>
-                        <p className="text-xs text-gray-500 lowercase">
+                        <p className={`text-xs uppercase text-gray-500 `}>
+                          {item.color}
+                        </p>
+                        <p className="text-xs text-gray-400 lowercase">
                           size: {item.size}
                         </p>
                         <div className="flex items-center gap-1 mt-2">

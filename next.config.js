@@ -4,6 +4,7 @@ const nextConfig = {
   env: {
     STRAPI_URL: process.env.STRAPI_URL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   images: {
     remotePatterns: [

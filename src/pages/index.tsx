@@ -41,28 +41,44 @@ const Home = ({ products }: { products: Product[] }) => {
     <DefaultTemplate
       head={
         <Head>
-          <title>stab.cult</title>
+          <title>stab.cult merch store | Juana Osmeña Hardcore</title>
           <meta
             name="description"
-            content="stab is a heavy hardcore band
-            with relentless energy and unapologetic intensity, we deliver a raw
-            and powerful sound that hits hard and leaves a lasting impression."
+            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
           />
-          <meta property="og:title" content="stab.cult" />
+
+          {/* Open Graph (Facebook, LinkedIn, etc.) */}
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:title"
+            content="stab.cult merch store | Juana Osmeña Hardcore"
+          />
           <meta
             property="og:description"
-            content="stab is a heavy hardcore band
-          with relentless energy and unapologetic intensity, we deliver a raw
-          and powerful sound that hits hard and leaves a lasting impression."
+            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
           />
-          <meta property="og:image" content="/dead.jpg" />
-          <link rel="shortcut icon" href="knife.ico" type="image/x-icon" />
+          <meta property="og:image" content="https://stabcult.com/dead.jpg" />
+          <meta property="og:url" content="https://stabcult.com" />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content="stab.cult merch store | Juana Osmeña Hardcore"
+          />
+          <meta
+            name="twitter:description"
+            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
+          />
+          <meta name="twitter:image" content="https://stabcult.com/dead.jpg" />
+
+          <link rel="icon" href="/knife.ico" type="image/x-icon" />
         </Head>
       }
     >
       <main>
         <div className="w-full max-w-5xl min-h-screen p-4 mx-auto mt-4 sm:p-8 md:p-12">
-          <h1 className="mb-20 text-4xl font-light tracking-tight text-start scroll-m-20 text-stone-800 text-balance">
+          <h1 className="sticky top-0 z-10 mb-10 text-4xl font-light tracking-tight bg-white md:mb-20 text-start scroll-m-20 text-stone-800 text-balance">
             mertz
           </h1>
 
