@@ -50,7 +50,7 @@ const Product = ({ product }: { product: Product[] }) => {
     );
 
     toast.success(
-      `Added ${item.name} (${sizeName}, ${colorName}) x${quantity} to cart`
+      `Added ${item.name} (${sizeName}, ${colorName}) x${quantity} to cart`.toLowerCase()
     );
   };
   const [quantity, setQuantity] = useState(1);

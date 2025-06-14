@@ -93,7 +93,7 @@ const CheckoutPage = () => {
 
       // 3. Clear cart and redirect/confirm
       toast.success("Order placed successfully!");
-      router.push(`/order-success?ref=${res.data.data.orderId}`, undefined, {
+      router.push(`/order-success?ref=test`, undefined, {
         scroll: false,
       });
       // await axios.post("/api/send-order-email", { order: res.data.data });
@@ -473,61 +473,63 @@ const CheckoutPage = () => {
           )}
 
           {/* Right: Summary */}
-          <div className="px-4 py-2 mb-10 bg-white border rounded md:p-6 h-fit">
-            <h2 className="mb-4 text-lg font-light">Order Summary</h2>
+          {items.length > 0 && (
+            <div className="px-4 py-2 mb-10 bg-white border rounded md:p-6 h-fit">
+              <h2 className="mb-4 text-lg font-light">Order Summary</h2>
 
-            <div className="space-y-4 overflow-y-auto max-h-96">
-              {items.map((item) => (
-                <div
-                  key={`${item.id}-${item.size}`}
-                  className="flex items-center gap-4 text-sm"
-                >
-                  {/* Image */}
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    className="object-cover w-20 h-20 rounded shadow"
-                    width={80}
-                    height={80}
-                  />
+              <div className="space-y-4 overflow-y-auto max-h-96">
+                {items.map((item) => (
+                  <div
+                    key={`${item.id}-${item.size}`}
+                    className="flex items-center gap-4 text-sm"
+                  >
+                    {/* Image */}
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      className="object-cover w-20 h-20 rounded shadow"
+                      width={80}
+                      height={80}
+                    />
 
-                  {/* Info and quantity */}
-                  <div className="flex-1">
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-xs text-gray-500 uppercase">
-                      {item.color}
-                    </p>
-                    <p className="text-xs text-gray-400">Size: {item.size}</p>
-                    <p className="text-xs text-gray-400">
-                      Qty: {item.quantity}
-                    </p>
+                    {/* Info and quantity */}
+                    <div className="flex-1">
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-xs text-gray-500 uppercase">
+                        {item.color}
+                      </p>
+                      <p className="text-xs text-gray-400">Size: {item.size}</p>
+                      <p className="text-xs text-gray-400">
+                        Qty: {item.quantity}
+                      </p>
+                    </div>
+
+                    {/* Price */}
+                    <div className="text-sm font-light whitespace-nowrap">
+                      ₱
+                      {new Intl.NumberFormat("en-PH", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(item.price * item.quantity)}
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  {/* Price */}
-                  <div className="text-sm font-light whitespace-nowrap">
-                    ₱
-                    {new Intl.NumberFormat("en-PH", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }).format(item.price * item.quantity)}
-                  </div>
-                </div>
-              ))}
+              <div className="flex justify-between pt-4 mt-4 text-base border-t font-">
+                <span>Total</span>
+                <span>
+                  ₱
+                  {hasHydrated
+                    ? `${new Intl.NumberFormat("en-PH", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(total)}`
+                    : "0.00"}
+                </span>
+              </div>
             </div>
-
-            <div className="flex justify-between pt-4 mt-4 text-base border-t font-">
-              <span>Total</span>
-              <span>
-                ₱
-                {hasHydrated
-                  ? `${new Intl.NumberFormat("en-PH", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }).format(total)}`
-                  : "0.00"}
-              </span>
-            </div>
-          </div>
+          )}
         </>
       )}
     </div>
