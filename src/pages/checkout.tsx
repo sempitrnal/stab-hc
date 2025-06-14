@@ -1,6 +1,7 @@
 import { useCartStore } from "@/stores/useCartStore";
 import { useHasHydrated } from "@/stores/useHasHydrated";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -462,10 +463,12 @@ const CheckoutPage = () => {
                   className="flex items-start gap-4 text-sm"
                 >
                   {/* Image */}
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
                     className="object-cover w-20 h-20 rounded shadow"
+                    width={80}
+                    height={80}
                   />
 
                   {/* Info and quantity */}

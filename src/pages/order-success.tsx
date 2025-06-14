@@ -56,8 +56,8 @@ const OrderSuccess = () => {
         <FiCheckCircle className="mx-auto mb-4 text-5xl text-green-500" />
         <h1 className="mb-2 text-2xl font-bold">Order Placed Successfully</h1>
         <p className="mb-6 text-gray-600">
-          Thank you for your purchase! We'll reach out to confirm your order
-          details and shipping info soon.
+          {`Thank you for your purchase! We'll reach out to confirm your order
+          details and shipping info soon.`}
         </p>
 
         <div className="flex flex-col gap-2 p-4 mb-6 text-sm text-left border rounded-md bg-gray-50">

@@ -1,5 +1,6 @@
 import { useCartStore } from "@/stores/useCartStore";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/router";
 
 const CartDrawer = () => {
@@ -51,7 +52,9 @@ const CartDrawer = () => {
                     className="pb-2 mb-4 border-b"
                   >
                     <div className="flex items-center gap-3">
-                      <img
+                      <Image
+                        width={96}
+                        height={96}
                         src={item.image}
                         alt={item.name}
                         className="object-cover w-24 h-24 rounded"

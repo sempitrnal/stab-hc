@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -89,7 +90,9 @@ const OrdersTable = ({
                     ))}
                   </td>
                   <td className="px-4 py-2">
-                    <img
+                    <Image
+                      width={48}
+                      height={48}
                       src={order.proof.url}
                       alt="Proof"
                       className="object-cover w-12 h-12 rounded cursor-pointer hover:opacity-80"
