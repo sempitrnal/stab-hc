@@ -41,7 +41,9 @@ const Home = ({ products }: { products: Product[] }) => {
     <DefaultTemplate
       head={
         <Head>
-          <title>stab.cult merch store | Juana Osmeña Hardcore</title>
+          <title className="lowercase">
+            stab.cult merch store | Juana Osmeña Hardcore
+          </title>
           <meta
             name="description"
             content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
@@ -51,11 +53,11 @@ const Home = ({ products }: { products: Product[] }) => {
           <meta property="og:type" content="website" />
           <meta
             property="og:title"
-            content="stab.cult merch store | Juana Osmeña Hardcore"
+            content="stab.cult merch store | juana osmeña hardcore"
           />
           <meta
             property="og:description"
-            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
+            content="official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta cebu."
           />
           <meta property="og:image" content="https://stabcult.com/dead.jpg" />
           <meta property="og:url" content="https://stabcult.com" />
@@ -68,7 +70,7 @@ const Home = ({ products }: { products: Product[] }) => {
           />
           <meta
             name="twitter:description"
-            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
+            content="official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta cebu."
           />
           <meta name="twitter:image" content="https://stabcult.com/dead.jpg" />
 
