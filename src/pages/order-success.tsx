@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FiCheckCircle } from "react-icons/fi";
 
 const OrderSuccess = () => {
   const router = useRouter();
@@ -56,15 +55,17 @@ const OrderSuccess = () => {
   const orderData = order;
 
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-12 bg-[#fafafa]">
+    <div className="min-h-[80vh] flex flex-col items-center lowercase justify-center px-4 py-12 bg-[#fafafa]">
       <Head>
         <title className="lowercase">Order Success | stab.cult</title>
       </Head>
-      <div className="w-full max-w-md p-8 text-center bg-white border shadow-md rounded-xl">
-        <FiCheckCircle className="mx-auto mb-4 text-5xl text-green-500" />
-        <h1 className="mb-2 text-2xl font-bold">Order Placed Successfully</h1>
+      <div className="w-full max-w-2xl p-8 text-center bg-white border shadow-md rounded-xl">
+        <div className="flex items-center justify-center mb-2">
+          <Image width={100} height={100} src="/type-shi.jpg" alt="" />
+        </div>
+        <h1 className="mb-2 text-3xl font-light">Order Placed Successfully!</h1>
         <p className="mb-6 text-gray-600">
-          {`Thank you for your purchase! We'll reach out to confirm your order
+          {`Thank you for your purchase gaw! We'll reach out to confirm your order
           details and shipping info soon.`}
         </p>
 
@@ -84,26 +85,38 @@ const OrderSuccess = () => {
               : "N/A"}
           </p>
           {/* Order summary */}
-          <p className="font-medium">Order Summary:</p>
+          <p className="font-medium">Order Summary</p>
           {orderData.items.map((item: any, index: number) => (
             <div key={index} className="flex items-center gap-2 text-gray-700">
               <Image width={100} height={100} src={item.image} alt="" />
               <div className="flex flex-col">
                 <p>{item.name} </p>
+                <p className="text-xs text-gray-500 uppercase">{item.color}</p>
                 <p className="text-sm text-gray-500">
                   Size: {item.size} | Qty: {item.quantity}
                 </p>
                 <p className="text-sm">
-                  Price: ₱{item.price.toFixed(2)} x {item.quantity} = ₱
-                  {(item.price * item.quantity).toFixed(2)}
+                  Price: ₱
+                  {new Intl.NumberFormat("en-PH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(item.price)}{" "}
+                  x {item.quantity} = ₱
+                  {new Intl.NumberFormat("en-PH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(item.price * item.quantity)}
                 </p>
               </div>
             </div>
           ))}
 
           <p>
-            <span className="font-medium">Total:</span> ₱
-            {orderData.total.toFixed(2)}
+            <span className="font-light">Total:</span> ₱
+            {new Intl.NumberFormat("en-PH", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(orderData.total)}
           </p>
         </div>
 
@@ -111,7 +124,7 @@ const OrderSuccess = () => {
           href="/"
           className="inline-block w-full px-6 py-3 text-sm font-medium text-white transition bg-black rounded hover:bg-gray-800"
         >
-          Back to Shop
+          Back to home
         </Link>
       </div>
     </div>
