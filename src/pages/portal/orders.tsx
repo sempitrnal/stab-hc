@@ -33,21 +33,38 @@ const Orders = () => {
 
     fetchOrders(search);
   }, [search]);
-  const itemTally: Record<string, { quantity: number; image: string }> = {};
+  type Tally = Record<
+    string, // item name
+    {
+      image: string;
+      variations: Record<
+        string, // color
+        Record<string, number> // size => quantity
+      >;
+    }
+  >;
+
+  const itemTally: Tally = {};
+
   orders.forEach((order: any) => {
     order.items.forEach((item: any) => {
-      const key = `${item.name}||${item.size}||${item.color}`;
-      if (itemTally[key]) {
-        itemTally[key].quantity += item.quantity;
-      } else {
-        itemTally[key] = {
-          quantity: item.quantity,
-          image: item.image,
+      const { name, size, color, quantity, image } = item;
+
+      if (!itemTally[name]) {
+        itemTally[name] = {
+          image,
+          variations: {},
         };
       }
+
+      if (!itemTally[name].variations[color]) {
+        itemTally[name].variations[color] = {};
+      }
+
+      itemTally[name].variations[color][size] =
+        (itemTally[name].variations[color][size] || 0) + quantity;
     });
   });
-  console.log(orders);
 
   return (
     <div className="p-6">
@@ -60,15 +77,10 @@ const Orders = () => {
 
       <div className="p-6 bg-white ">
         <h2 className="mb-10 text-lg font-semibold">Item Tally</h2>
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {Object.entries(itemTally).map(([key, { quantity, image }]) => {
-            const [name, size, color] = key.split("||");
-
-            return (
-              <li
-                key={key}
-                className="flex items-start gap-4 bg-white rounded "
-              >
+        <ul className="flex space-y-6">
+          {Object.entries(itemTally).map(([name, { image, variations }]) => (
+            <li key={name}>
+              <div className="flex items-center gap-4 mb-2">
                 <Image
                   width={100}
                   height={100}
@@ -76,18 +88,26 @@ const Orders = () => {
                   alt={name}
                   className="object-cover rounded"
                 />
-                <div className="flex flex-col">
-                  <p className="font-medium lowercase">{name}</p>
-                  <p className="text-sm text-gray-600 lowercase">
-                    {size} – {color}
-                  </p>
-                  <p className="text-sm font-semibold">
-                    {quantity} {quantity > 1 ? "pcs" : "pc"}
-                  </p>
+                <div className="">
+                  <p className="text-lg font-semibold lowercase">{name}</p>
+                  <div className="">
+                    {Object.entries(variations).map(([color, sizes]) => (
+                      <div key={color}>
+                        <p className="font-medium lowercase">{color}</p>
+                        <ul className="ml-4 text-sm text-gray-700 lowercase">
+                          {Object.entries(sizes).map(([size, qty]) => (
+                            <li key={size}>
+                              {size} – {qty} {qty > 1 ? "pcs" : "pc"}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </li>
-            );
-          })}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
