@@ -7,35 +7,59 @@ import { useEffect, useState } from "react";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({ color: "", size: "", item: "" });
   const [filterOptions, setFilterOptions] = useState<any>();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  console.log(search);
+  useEffect(() => {
+    const fetchAllOrders = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/orders?populate=*");
+        const json = await res.json();
+        setAllOrders(json.data);
+        if (isInitialLoad) {
+          setOrders(json.data);
+          setIsInitialLoad(false);
+        }
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      } catch (err) {
+        console.error("Failed to fetch all orders:", err);
+      }
+    };
+
+    fetchAllOrders();
+  }, []);
   console.log(search);
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
-      try {
-        const query = new URLSearchParams();
 
-        if (search) {
-          query.append("search", search);
+      try {
+        if (!search && !filters.item && !filters.color && !filters.size) {
+          const res = await fetch("/api/orders?populate=*");
+          const json = await res.json();
+          setOrders(json.data);
+          setTimeout(() => setLoading(false), 2000);
+          return;
         }
 
-        // Handle filters for items using $and clause
-
+        const query = new URLSearchParams();
+        if (search) query.append("search", search);
         if (filters.item) query.append("item", filters.item);
         if (filters.color) query.append("color", filters.color);
         if (filters.size) query.append("size", filters.size);
-
         query.append("populate", "*");
 
         const res = await fetch(`/api/orders?${query.toString()}`);
         const json = await res.json();
         setOrders(json.data);
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+        setTimeout(() => setLoading(false), 2000);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
       }
@@ -66,7 +90,7 @@ const Orders = () => {
     "6xl",
   ];
 
-  orders.forEach((order: any) => {
+  allOrders.forEach((order: any) => {
     order.items.forEach((item: any) => {
       const { name, size, color, quantity, image } = item;
 

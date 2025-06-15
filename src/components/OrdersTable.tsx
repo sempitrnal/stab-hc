@@ -48,7 +48,18 @@ const OrdersTable = ({
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearch(value);
+            const params = new URLSearchParams(window.location.search);
+            if (value) {
+              params.set("search", value);
+            } else {
+              params.delete("search");
+            }
+            const newUrl = `${window.location.pathname}?${params.toString()}`;
+            window.history.replaceState({}, "", newUrl);
+          }}
           placeholder="Search orders..."
           className="w-full px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
         />
