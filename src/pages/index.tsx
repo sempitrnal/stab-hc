@@ -1,3 +1,4 @@
+import useGlobalLoadingStore from "@/stores/loading";
 import DefaultTemplate from "@/templates/default-template";
 import { Product } from "@/types/product";
 import { motion } from "framer-motion";
@@ -8,6 +9,9 @@ import { useEffect, useRef, useState } from "react";
 
 const Home = ({ products }: { products: Product[] }) => {
   const [playing, setPlaying] = useState(false);
+  const [clickedProductSlug, setClickedProductSlug] = useState<string | null>(
+    null
+  );
   const router = useRouter();
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
@@ -37,6 +41,7 @@ const Home = ({ products }: { products: Product[] }) => {
   // const { data, loading, error } = useQuery(GET_HOMEPAGE);
   // if (loading) return <Loading />;
   console.log(products);
+  const { setLoading } = useGlobalLoadingStore();
   return (
     <DefaultTemplate
       head={
@@ -91,6 +96,8 @@ const Home = ({ products }: { products: Product[] }) => {
                   key={index}
                   className="flex flex-col gap-3 transition-all duration-300 ease-in-out cursor-pointer group"
                   onClick={() => {
+                    setClickedProductSlug(product.slug);
+                    setLoading(true);
                     router.push(`/product/${product.slug}`, undefined, {
                       scroll: false,
                     });

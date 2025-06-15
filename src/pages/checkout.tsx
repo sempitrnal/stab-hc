@@ -19,6 +19,7 @@ const CheckoutPage = () => {
     if (!files || files.length === 0) return;
     setProofFile(files[0]); // Only allow 1 file
   };
+  console.log(items);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -77,7 +78,6 @@ const CheckoutPage = () => {
           paymentMethod,
           total: total,
           items: items.map((i) => ({
-            id: i.id,
             name: i.name,
             size: i.size,
             quantity: i.quantity,
@@ -88,7 +88,7 @@ const CheckoutPage = () => {
           proof: uploadedFile.id,
         },
       };
-
+      console.log(JSON.stringify(orderPayload, null, 2));
       const res = await axios.post("/api/orders", orderPayload);
 
       // 3. Clear cart and redirect/confirm

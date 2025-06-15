@@ -20,7 +20,7 @@ const CartDrawer = () => {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-50 bg-black bg-opacity-50"
+            className="fixed inset-0 z-[9998] bg-black bg-opacity-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -29,7 +29,7 @@ const CartDrawer = () => {
 
           {/* Drawer */}
           <motion.div
-            className="fixed top-0 right-0 z-50 flex flex-col h-full bg-white shadow-lg w-80"
+            className="fixed top-0 right-0 z-[9999] flex flex-col h-full bg-white shadow-lg w-80"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}

@@ -73,7 +73,7 @@ const Stab = () => {
   return (
     <div
       // onClick={() => router.push("/")}
-      className="h-[100px] w-[150px] md:h-[120px] md:w-[700px] sm:translate-x-[2.2rem]"
+      className="h-[100px] w-[150px] md:h-[120px] md:w-[700px] sm:translate-x-[1.9rem]"
     >
       <Canvas style={{}}>
         <OrbitControls

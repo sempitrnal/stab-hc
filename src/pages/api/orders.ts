@@ -29,20 +29,48 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const { search, ref } = req.query;
+      const queryParams = new URLSearchParams();
 
-      let url = `${process.env.STRAPI_URL}/api/orders?populate=*`;
-
-      if (ref) {
-        url += `&filters[orderId][$eq]=${ref}`;
-      } else if (search) {
-        const params = new URLSearchParams({
-          "filters[$or][0][firstName][$containsi]": String(search),
-          "filters[$or][1][lastName][$containsi]": String(search),
-          "filters[$or][2][email][$containsi]": String(search),
-        });
-        url += `&${params.toString()}`;
+      if (req.query.ref) {
+        queryParams.append("filters[orderId][$eq]", String(req.query.ref));
+      } else if (req.query.search) {
+        const search = String(req.query.search);
+        queryParams.append("filters[$or][0][firstName][$containsi]", search);
+        queryParams.append("filters[$or][1][lastName][$containsi]", search);
+        queryParams.append("filters[$or][2][email][$containsi]", search);
+        queryParams.append("filters[$or][3][orderId][$containsi]", search);
       }
+
+      const itemFilters = [];
+      console.log("Raw req.query:", JSON.stringify(req.query));
+      console.log("Incoming request URL:", req.url);
+      if (req.query.item) {
+        itemFilters.push(
+          `filters[items][$and][${itemFilters.length}][name][$containsi]=${req.query.item}`
+        );
+      }
+      if (req.query.color) {
+        itemFilters.push(
+          `filters[items][$and][${itemFilters.length}][color][$containsi]=${req.query.color}`
+        );
+      }
+      if (req.query.size) {
+        itemFilters.push(
+          `filters[items][$and][${itemFilters.length}][size][$containsi]=${req.query.size}`
+        );
+      }
+
+      if (itemFilters.length > 0) {
+        itemFilters.forEach((filter) => {
+          const [key, value] = filter.split("=");
+          queryParams.append(key, value);
+        });
+      }
+
+      queryParams.append("populate", "*");
+
+      const url = `${process.env.STRAPI_URL}/api/orders?${queryParams.toString()}`;
+      console.log(url);
 
       const strapiRes = await axios.get(url, {
         headers: {

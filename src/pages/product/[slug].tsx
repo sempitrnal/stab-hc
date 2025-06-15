@@ -1,3 +1,4 @@
+import useGlobalLoadingStore from "@/stores/loading";
 import { useCartStore } from "@/stores/useCartStore";
 import DefaultTemplate from "@/templates/default-template";
 import type { Product } from "@/types/product";
@@ -72,7 +73,7 @@ const Product = ({ product }: { product: Product[] }) => {
   const imageUrl = item.images?.[activeImageIndex]?.url
     ? item.images[activeImageIndex].url
     : "https://stabcult.com/default-image.jpg"; // fallback image
-
+  const { setLoading } = useGlobalLoadingStore();
   return (
     <DefaultTemplate
       head={
@@ -103,7 +104,10 @@ const Product = ({ product }: { product: Product[] }) => {
       <main className="w-full max-w-5xl min-h-screen p-4 mx-auto sm:p-8 md:px-12 md:py-8">
         <div
           className="flex items-center gap-2 mb-6 text-xl cursor-pointer row hover:text-gray-600"
-          onClick={() => router.push("/", undefined, { scroll: false })}
+          onClick={() => {
+            setLoading(true);
+            router.push("/", undefined, { scroll: false });
+          }}
         >
           <FiArrowLeft />
           <p className="-translate-y-0.5">back</p>

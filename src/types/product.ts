@@ -43,7 +43,7 @@ export type SizeOption = {
   width: number;
   length: number;
 };
-type SizeKey =
+export type SizeKey =
   | "xs"
   | "sm"
   | "md"
