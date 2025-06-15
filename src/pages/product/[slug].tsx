@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { FiArrowLeft } from "react-icons/fi";
 
 const Product = ({ product }: { product: Product[] }) => {
+  const { setLoading } = useGlobalLoadingStore();
   const item = product[0];
   console.log(item.images[0]?.url);
   const [activeImage, setActiveImage] = useState(item.images[0]?.url);
@@ -73,7 +74,7 @@ const Product = ({ product }: { product: Product[] }) => {
   const imageUrl = item.images?.[activeImageIndex]?.url
     ? item.images[activeImageIndex].url
     : "https://stabcult.com/default-image.jpg"; // fallback image
-  const { setLoading } = useGlobalLoadingStore();
+
   return (
     <DefaultTemplate
       head={
