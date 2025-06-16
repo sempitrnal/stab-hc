@@ -46,40 +46,73 @@ const Home = ({ products }: { products: Product[] }) => {
     <DefaultTemplate
       head={
         <Head>
-          <title className="lowercase">
-            stab.cult merch store | juana osmeña hardcore
-          </title>
+          <title>stab.cult | juana osmeña hardcore</title>
           <meta
             name="description"
-            content="Official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta Cebu."
+            content="stab.cult official — juana osmeña hardcore gaw. tees, gear, and underground spirit from cebu."
           />
 
-          {/* Open Graph (Facebook, LinkedIn, etc.) */}
+          <link rel="canonical" href="https://www.stabcult.com" />
+
+          {/* open graph */}
           <meta property="og:type" content="website" />
           <meta
             property="og:title"
-            content="stab.cult merch store | juana osmeña hardcore"
+            content="stab.cult | juana osmeña hardcore"
           />
           <meta
             property="og:description"
-            content="official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta cebu."
+            content="stab.cult official — juana osmeña hardcore gaw. tees, gear, and underground spirit from cebu."
           />
-          <meta property="og:image" content="https://stabcult.com/dead.jpg" />
-          <meta property="og:url" content="https://stabcult.com" />
+          <meta
+            property="og:image"
+            content="https://www.stabcult.com/dead.jpg"
+          />
+          <meta property="og:url" content="https://www.stabcult.com" />
 
-          {/* Twitter */}
+          {/* twitter */}
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
-            content="stab.cult merch store | juana osmeña hardcore"
+            content="stab.cult | juana osmeña hardcore"
           />
           <meta
             name="twitter:description"
-            content="official merch store of stab.cult — a hardcore band from Juana Osmeña bringing raw, aggressive energy straight outta cebu."
+            content="stab.cult official — juana osmeña hardcore gaw. tees, gear, and underground spirit from cebu."
           />
-          <meta name="twitter:image" content="https://stabcult.com/dead.jpg" />
+          <meta
+            name="twitter:image"
+            content="https://www.stabcult.com/dead.jpg"
+          />
 
+          <link rel="shortcut icon" href="/knife.ico" type="image/x-icon" />
           <link rel="icon" href="/knife.ico" type="image/x-icon" />
+
+          {/* json-ld schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Store",
+                name: "stab.cult",
+                url: "https://www.stabcult.com",
+                description: "stab.cult — juana osmeña hardcore gaw from cebu.",
+                image: "https://www.stabcult.com/dead.jpg",
+                logo: "https://www.stabcult.com/knife.ico",
+                sameAs: [
+                  "https://instagram.com/stab.cult",
+                  "https://facebook.com/stab.cult",
+                ],
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "cebu city",
+                  addressRegion: "cebu",
+                  addressCountry: "ph",
+                },
+              }),
+            }}
+          />
         </Head>
       }
     >

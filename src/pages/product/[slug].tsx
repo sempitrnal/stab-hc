@@ -67,30 +67,31 @@ const Product = ({ product }: { product: Product[] }) => {
       </div>
     );
   }
-  const title = `${item.name.toLowerCase()} | stab.cult merch`;
-  const description = `Get ${item.name.toLowerCase()} for ₱${item.price.toFixed(
-    2
-  )} — official stab.cult merch.`;
+  const title = `${item.name.toLowerCase()} | stab.cult`;
+  const description = `get ${item.name.toLowerCase()} for ₱${item.price.toFixed(2)} — official stab.cult gear.`;
+
   const imageUrl = item.images?.[activeImageIndex]?.url
     ? item.images[activeImageIndex].url
-    : "https://stabcult.com/default-image.jpg"; // fallback image
+    : "https://www.stabcult.com/default-image.jpg";
+
+  const productUrl = `https://www.stabcult.com/product/${item.slug}`;
 
   return (
     <DefaultTemplate
       head={
         <Head>
-          <title className="lowercase">{title}</title>
+          <title>{title}</title>
           <meta name="description" content={description} />
+
+          {/* Canonical URL */}
+          <link rel="canonical" href={productUrl} />
 
           {/* Open Graph */}
           <meta property="og:type" content="product" />
           <meta property="og:title" content={title} />
           <meta property="og:description" content={description} />
           <meta property="og:image" content={imageUrl} />
-          <meta
-            property="og:url"
-            content={`https://stabcult.com/product/${item.slug}`}
-          />
+          <meta property="og:url" content={productUrl} />
 
           {/* Twitter */}
           <meta name="twitter:card" content="summary_large_image" />
@@ -98,7 +99,65 @@ const Product = ({ product }: { product: Product[] }) => {
           <meta name="twitter:description" content={description} />
           <meta name="twitter:image" content={imageUrl} />
 
+          {/* Favicon */}
           <link rel="icon" href="/knife.ico" type="image/x-icon" />
+
+          {/* JSON-LD: Product Schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org/",
+                "@type": "Product",
+                name: item.name.toLowerCase(),
+                image: imageUrl,
+                description: `official stab.cult release — ${item.name.toLowerCase()}`,
+                sku: item.slug,
+                offers: {
+                  "@type": "Offer",
+                  url: productUrl,
+                  priceCurrency: "PHP",
+                  price: item.price.toFixed(2),
+                  availability: "https://schema.org/InStock",
+                },
+                brand: {
+                  "@type": "Brand",
+                  name: "stab.cult",
+                },
+              }),
+            }}
+          />
+
+          {/* JSON-LD: BreadcrumbList */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "home",
+                    item: "https://www.stabcult.com",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "product",
+                    item: "https://www.stabcult.com/product",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 3,
+                    name: item.name.toLowerCase(),
+                    item: productUrl,
+                  },
+                ],
+              }),
+            }}
+          />
         </Head>
       }
     >

@@ -5,6 +5,7 @@ import useGlobalLoadingStore from "@/stores/loading";
 import "@/styles/globals.css";
 import { AnimatePresence, motion } from "framer-motion";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { Toaster } from "react-hot-toast";
 export default function App({ Component, pageProps, router }: AppProps) {
   const route = router;
@@ -17,6 +18,10 @@ export default function App({ Component, pageProps, router }: AppProps) {
         mode="wait"
         onExitComplete={() => window.scrollTo(0, 0)}
       >
+        <Head>
+          <link rel="icon" href="/knife.ico" type="image/x-icon" />
+          <link rel="shortcut icon" href="/knife.ico" type="image/x-icon" />
+        </Head>
         <motion.div
           key={router.asPath}
           initial={{ opacity: 0, y: loading ? 0 : 20 }}
