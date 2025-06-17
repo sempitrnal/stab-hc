@@ -86,6 +86,7 @@ export default async function handler(
       }
       if (pageSize) queryParams.append("pagination[pageSize]", pageSize);
       queryParams.append("populate", "*");
+      queryParams.append("sort", "createdAt:desc");
 
       const url = `${process.env.STRAPI_URL}/api/orders?${queryParams.toString()}`;
       console.log(url);

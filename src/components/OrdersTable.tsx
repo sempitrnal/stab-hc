@@ -116,6 +116,7 @@ const OrdersTable = ({
           <table className="w-full text-sm border border-gray-300">
             <thead className="bg-gray-100">
               <tr>
+                <th className="p-2 text-left">Date</th>
                 <th className="p-2 text-left">Order ID</th>
                 <th className="p-2 text-left">Customer</th>
                 <th className="p-2 text-left">Email</th>
@@ -130,6 +131,12 @@ const OrdersTable = ({
             <tbody>
               {orders.map((order, idx) => (
                 <tr key={idx} className="border-t">
+                  <td className="p-2">
+                    {new Date(order.createdAt).toLocaleString("en-PH", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}
+                  </td>
                   <td className="p-2">{order.orderId}</td>
                   <td className="p-2">
                     {order.firstName} {order.lastName}
