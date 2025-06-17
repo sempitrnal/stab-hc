@@ -146,31 +146,6 @@ const Home = ({ products }: { products: Product[] }) => {
     </DefaultTemplate>
 
     // <audio ref={ref} src="/yea.m4a"></audio>
-
-    // <div className="flex gap-2 mt-20">
-    //   <FaFacebookSquare
-    //     className="text-[2rem]  cursor-pointer transition-all duration-300 hover:text-stone-800"
-    //     onClick={() => {
-    //       window.open("https://www.facebook.com/stabzilog", "_blank");
-    //     }}
-    //   />
-    //   <FaInstagram
-    //     className="text-[2rem]  cursor-pointer transition-all duration-300 hover:text-stone-800"
-    //     onClick={() => {
-    //       window.open("https://www.instagram.com/stab.cult", "_blank");
-    //     }}
-    //   />
-    //   <FaSpotify
-    //     className="text-[2rem]  cursor-pointer transition-all duration-300 hover:text-stone-800"
-    //     onClick={() => {
-    //       window.open(
-    //         "https://open.spotify.com/artist/7sCkooThtWgYUNIp07b73f?si=v_jKMjBTQ-iyB5W_8enL7A",
-    //         "_blank"
-    //       );
-    //     }}
-    //   />
-    // </div>
-    // <div className="mt-10 text-xs">made by bo, hells yeah!</div>
   );
 };
 

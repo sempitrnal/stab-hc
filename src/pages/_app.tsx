@@ -1,4 +1,5 @@
 import CartDrawer from "@/components/CartDrawer";
+import Footer from "@/components/Footer";
 import GlobalLoadingOverlay from "@/components/GlobalLoadingOverlay";
 import Nav from "@/components/Nav";
 import useGlobalLoadingStore from "@/stores/loading";
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         <CartDrawer />
         <Toaster position="bottom-center" />
       </AnimatePresence>
+      <Footer />
     </>
   );
 }
