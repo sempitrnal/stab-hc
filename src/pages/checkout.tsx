@@ -43,10 +43,10 @@ const CheckoutPage = () => {
     },
   });
   const handleSubmit = async () => {
-    // if (!proofFile) {
-    //   toast.error("Please upload proof of payment");
-    //   return;
-    // }
+    if (!proofFile) {
+      toast.error("Please upload proof of payment");
+      return;
+    }
     const {
       firstName,
       lastName,
@@ -58,11 +58,11 @@ const CheckoutPage = () => {
     } = form;
     try {
       setLoading(true);
-      // const formData = new FormData();
-      // formData.append("proof", proofFile); // can be File or Blob
+      const formData = new FormData();
+      formData.append("proof", proofFile); // can be File or Blob
 
-      // const uploadRes = await axios.post("/api/upload", formData);
-      // const uploadedFile = uploadRes.data[0]; // Get uploaded file ref
+      const uploadRes = await axios.post("/api/upload", formData);
+      const uploadedFile = uploadRes.data[0]; // Get uploaded file ref
 
       // 2. Submit order to Strapi
       const orderPayload = {
@@ -92,7 +92,7 @@ const CheckoutPage = () => {
             image: i.image,
             color: i.color,
           })),
-          // proof: uploadedFile.id,
+          proof: uploadedFile.id,
         },
       };
       console.log(JSON.stringify(orderPayload, null, 2));
