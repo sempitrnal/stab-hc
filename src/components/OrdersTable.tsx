@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DesktopOrderRow from "./DesktopOrderRow";
+import MobileOrderCard from "./MobileOrderCard";
 import OrdersTableFilters from "./OrdersTableFilters";
 import { Spinner } from "./ui/Spinner";
 
@@ -18,6 +20,8 @@ const OrdersTable = ({
   loading,
   metaPagination,
   onPageChange,
+  selectedOrders,
+  setSelectedOrders,
 }: {
   orders: any[];
   search: string;
@@ -33,12 +37,16 @@ const OrdersTable = ({
     total: number;
   };
   onPageChange: (page: number) => void;
+  selectedOrders: string[];
+  setSelectedOrders: (ids: string[]) => void;
 }) => {
   const [modalImage, setModalImage] = useState<string | null>(null);
   const router = useRouter();
   const [showShirtDropdown, setShowShirtDropdown] = useState(false);
   const [showColorDropdown, setShowColorDropdown] = useState(false);
+  const [showDeliveryDropdown, setShowDeliveryDropdown] = useState(false);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev: any) => ({ ...prev, [key]: value }));
@@ -54,21 +62,21 @@ const OrdersTable = ({
 
   const renderItemsCell = (items: any[]) => (
     <Popover className="relative">
-      <Popover.Button className="text-xs text-blue-600 underline">
+      <Popover.Button className="px-2 py-1 mt-2 text-xs lowercase bg-white border border-gray-300 rounded text-stone-900 hover:bg-gray-100 focus:outline-none ">
         {items.length > 0
           ? `${items[0].name} ${items.length > 1 ? `+${items.length - 1}` : ""}`
           : "No items"}
       </Popover.Button>
       <Popover.Panel className="absolute z-10 p-2 mt-2 overflow-y-auto bg-white border rounded shadow-md w-80 max-h-64">
         {items.map((item, idx) => (
-          <div key={idx} className="flex items-center gap-4 mb-2">
-            <div className="relative w-14 h-14">
+          <div key={idx} className="flex items-end gap-4 mb-2">
+            <div className="relative rounded h-14 w-14 ">
               <Image
                 width={100}
                 height={100}
                 alt=""
                 src={item.image}
-                className="object-cover rounded"
+                className="object-cover "
               />
               <div className="absolute top-[-8px] right-[-8px]">
                 <p className="flex items-center justify-center w-4 h-4 text-xs font-semibold text-white bg-purple-900 rounded-full">
@@ -87,10 +95,9 @@ const OrdersTable = ({
       </Popover.Panel>
     </Popover>
   );
-
+  console.log(selectedOrders);
   return (
     <div className="w-full">
-      {/* existing search/filter UI... */}
       <OrdersTableFilters
         search={search}
         setSearch={setSearch}
@@ -105,17 +112,80 @@ const OrdersTable = ({
         setShowSizeDropdown={setShowSizeDropdown}
         handleFilterChange={handleFilterChange}
         onPageChange={onPageChange}
+        showDeliveryDropdown={showDeliveryDropdown}
+        setShowDeliveryDropdown={setShowDeliveryDropdown}
         page={metaPagination.page}
       />
+      <div
+        className={`flex items-center ${isEditing ? "justify-between lg:justify-end" : "justify-end"} mb-2`}
+      >
+        {isEditing && (
+          <label
+            htmlFor="select-all-orders"
+            className="flex items-center gap-2 mr-2 cursor-pointer lg:hidden"
+          >
+            <input
+              id="select-all-orders"
+              type="checkbox"
+              className="cursor-pointer"
+              onChange={(e) => {
+                if (e.target.checked) {
+                  const allIds = orders.map((o) => o.id);
+                  setSelectedOrders(allIds);
+                } else {
+                  setSelectedOrders([]);
+                }
+              }}
+              checked={
+                orders.length > 0 && selectedOrders.length === orders.length
+              }
+            />
+            <p className="text-sm translate-y-[-2px]">select all</p>
+          </label>
+        )}
+        <button
+          onClick={() => {
+            setIsEditing(!isEditing);
+            if (isEditing) {
+              setSelectedOrders([]);
+            } else {
+              // If entering edit mode, select all orders by default
+            }
+          }}
+          className="px-3 py-1 text-sm text-white bg-[#140a1f] rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isEditing ? "Done" : "Edit"}
+        </button>
+      </div>
       {loading ? (
         <div className="flex items-center justify-center h-[50vh]">
           <Spinner />
         </div>
       ) : orders.length > 0 ? (
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <table className="w-full text-sm border border-gray-300">
             <thead className="bg-gray-100">
               <tr>
+                {isEditing && (
+                  <th className="p-2 text-left">
+                    <input
+                      type="checkbox"
+                      className="cursor-pointer"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          const allIds = orders.map((o) => o.id);
+                          setSelectedOrders(allIds);
+                        } else {
+                          setSelectedOrders([]);
+                        }
+                      }}
+                      checked={
+                        orders.length > 0 &&
+                        selectedOrders.length === orders.length
+                      }
+                    />
+                  </th>
+                )}
                 <th className="p-2 text-left">Date</th>
                 <th className="p-2 text-left">Order ID</th>
                 <th className="p-2 text-left">Customer</th>
@@ -129,41 +199,17 @@ const OrdersTable = ({
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, idx) => (
-                <tr key={idx} className="border-t">
-                  <td className="p-2">
-                    {new Date(order.createdAt).toLocaleString("en-PH", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </td>
-                  <td className="p-2">{order.orderId}</td>
-                  <td className="p-2">
-                    {order.firstName} {order.lastName}
-                  </td>
-                  <td className="p-2">{order.email}</td>
-                  <td className="p-2">{order.contactNumber}</td>
-                  <td className="p-2">
-                    {order.deliveryMethod === "ship"
-                      ? `${order.address.city}`
-                      : "Pick up"}
-                  </td>
-                  <td className="p-2 capitalize">{order.paymentMethod}</td>
-                  <td className="p-2">{renderItemsCell(order.items)}</td>
-                  <td className="p-2">{formatPrice(order.total)}</td>
-                  <td className="p-2">
-                    {order.proof && (
-                      <Image
-                        width={32}
-                        height={32}
-                        src={order.proof.url}
-                        alt="Proof"
-                        className="object-cover rounded cursor-pointer"
-                        onClick={() => setModalImage(order.proof.url)}
-                      />
-                    )}
-                  </td>
-                </tr>
+              {orders.map((order) => (
+                <DesktopOrderRow
+                  key={order.id}
+                  order={order}
+                  isEditing={isEditing}
+                  selectedOrders={selectedOrders}
+                  setSelectedOrders={setSelectedOrders}
+                  renderItemsCell={renderItemsCell}
+                  formatPrice={formatPrice}
+                  setModalImage={setModalImage}
+                />
               ))}
             </tbody>
           </table>
@@ -203,26 +249,17 @@ const OrdersTable = ({
       )}
 
       {/* Mobile Compact View */}
-      <div className="space-y-4 md:hidden">
-        {orders.map((order, idx) => (
-          <div key={idx} className="p-4 border rounded shadow-sm">
-            <p className="text-sm font-semibold">{order.orderId}</p>
-            <p className="text-sm">
-              {order.firstName} {order.lastName}
-            </p>
-            <p className="text-xs text-gray-500">{order.email}</p>
-            <p className="text-xs text-gray-500">{order.contactNumber}</p>
-            <p className="text-xs italic">
-              {order.deliveryMethod === "ship"
-                ? `${order.address.city}`
-                : "Pick up"}
-            </p>
-            <p className="text-xs capitalize">{order.paymentMethod}</p>
-            <div className="">{renderItemsCell(order.items)}</div>
-            <p className="mt-2 text-xs font-medium">
-              ₱{order.total.toFixed(2)}
-            </p>
-          </div>
+      <div className="space-y-4 lg:hidden">
+        <div className="flex justify-end mb-2 "></div>
+        {orders.map((order) => (
+          <MobileOrderCard
+            key={order.id}
+            order={order}
+            isEditing={isEditing}
+            selectedOrders={selectedOrders}
+            setSelectedOrders={setSelectedOrders}
+            renderItemsCell={renderItemsCell}
+          />
         ))}
         <div className="flex justify-center gap-2 mt-6">
           <button

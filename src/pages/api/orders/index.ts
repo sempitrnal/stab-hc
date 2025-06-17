@@ -59,6 +59,12 @@ export default async function handler(
           `filters[items][$and][${itemFilters.length}][size][$containsi]=${req.query.size}`
         );
       }
+      if (req.query.deliveryMethod) {
+        queryParams.append(
+          "filters[deliveryMethod][$eq]",
+          String(req.query.deliveryMethod)
+        );
+      }
 
       if (itemFilters.length > 0) {
         itemFilters.forEach((filter) => {

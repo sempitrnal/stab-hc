@@ -10,7 +10,12 @@ const Orders = () => {
   const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({ color: "", size: "", item: "" });
+  const [filters, setFilters] = useState({
+    color: "",
+    size: "",
+    item: "",
+    deliveryMethod: "",
+  });
   const [filterOptions, setFilterOptions] = useState<any>();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [metaPagination, setMetaPagination] = useState({
@@ -19,6 +24,7 @@ const Orders = () => {
     pageSize: 10,
     total: 0,
   });
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchAllOrders = async () => {
@@ -46,7 +52,13 @@ const Orders = () => {
       setLoading(true);
 
       try {
-        if (!search && !filters.item && !filters.color && !filters.size) {
+        if (
+          !search &&
+          !filters.item &&
+          !filters.color &&
+          !filters.size &&
+          !filters.deliveryMethod
+        ) {
           const res = await fetch(
             `/api/orders?populate=*&pagination[pageSize]=10&pagination[page]=${metaPagination.page}`
           );
@@ -65,6 +77,8 @@ const Orders = () => {
         if (filters.item) query.append("item", filters.item);
         if (filters.color) query.append("color", filters.color);
         if (filters.size) query.append("size", filters.size);
+        if (filters.deliveryMethod)
+          query.append("deliveryMethod", filters.deliveryMethod);
         query.append("populate", "*");
         query.append("pagination[pageSize]", "10");
         query.append("pagination[page]", String(metaPagination.page));
@@ -208,6 +222,7 @@ const Orders = () => {
   return (
     <div className="flex flex-col gap-4 p-5 md:p-20">
       <h1 className="mb-4 text-3xl font-bold">Orders</h1>
+
       <OrdersTable
         metaPagination={metaPagination}
         onPageChange={(page) => {
@@ -220,7 +235,36 @@ const Orders = () => {
         loading={loading}
         setFilters={setFilters}
         filterOptions={filterOptions}
+        selectedOrders={selectedOrders}
+        setSelectedOrders={setSelectedOrders}
       />
+
+      <div className="flex flex-wrap items-center gap-2 mt-4">
+        <select
+          className="p-2 border rounded"
+          onChange={(e) => {
+            const newStatus = e.target.value;
+            if (!newStatus) return;
+            selectedOrders.forEach(async (id) => {
+              await fetch(`/api/orders/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ data: { orderStatus: newStatus } }),
+              });
+            });
+          }}
+        >
+          <option value="">Update Status</option>
+          <option value="preorder">Preorder</option>
+          <option value="processing">Processing</option>
+          <option value="ready_for_pickup">Ready for Pickup</option>
+          <option value="ready_to_ship">Ready to Ship</option>
+          <option value="completed">Completed</option>
+        </select>
+        <p className="text-sm text-gray-600">
+          {selectedOrders.length} selected
+        </p>
+      </div>
 
       <div className="p-4 mt-10 bg-white border rounded md:p-6 ">
         <h2 className="mb-10 text-lg font-semibold">Item Tally</h2>

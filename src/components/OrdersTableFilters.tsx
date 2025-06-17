@@ -9,6 +9,8 @@ const OrdersTableFilters = ({
   showColorDropdown,
   setShowSizeDropdown,
   showSizeDropdown,
+  setShowDeliveryDropdown,
+  showDeliveryDropdown,
   handleFilterChange,
   onPageChange,
   page,
@@ -25,6 +27,8 @@ const OrdersTableFilters = ({
   setShowColorDropdown: (show: boolean) => void;
   showSizeDropdown: boolean;
   setShowSizeDropdown: (show: boolean) => void;
+  showDeliveryDropdown: boolean;
+  setShowDeliveryDropdown: (show: boolean) => void;
   handleFilterChange: (key: string, value: string) => void;
   onPageChange: (page: number) => void;
   page: number;
@@ -52,6 +56,47 @@ const OrdersTableFilters = ({
         placeholder="Search orders..."
         className="w-full px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
       />
+      <div className="relative w-full">
+        <button
+          type="button"
+          className="flex items-center justify-between w-full px-4 py-2 text-sm text-left lowercase bg-white border border-gray-300 rounded"
+          onClick={() => setShowDeliveryDropdown(!showDeliveryDropdown)}
+        >
+          {filters.deliveryMethod || "All Delivery Methods"}
+          <span>▾</span>
+        </button>
+        {showDeliveryDropdown && (
+          <div className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded shadow-lg max-h-64">
+            <div
+              onClick={() => {
+                handleFilterChange("deliveryMethod", "");
+                setShowDeliveryDropdown(false);
+              }}
+              className="px-4 py-2 text-sm lowercase cursor-pointer hover:bg-gray-100"
+            >
+              All Delivery Methods
+            </div>
+            <div
+              onClick={() => {
+                handleFilterChange("deliveryMethod", "ship");
+                setShowDeliveryDropdown(false);
+              }}
+              className="px-4 py-2 text-sm lowercase cursor-pointer hover:bg-gray-100"
+            >
+              Ship
+            </div>
+            <div
+              onClick={() => {
+                handleFilterChange("deliveryMethod", "pickup");
+                setShowDeliveryDropdown(false);
+              }}
+              className="px-4 py-2 text-sm lowercase cursor-pointer hover:bg-gray-100"
+            >
+              Pickup
+            </div>
+          </div>
+        )}
+      </div>
       <div className="relative w-full ">
         <button
           type="button"
