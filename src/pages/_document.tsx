@@ -6,6 +6,12 @@ export default function Document() {
       <Head>
         <link rel="icon" href="/knife.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/knife.ico" type="image/x-icon" />
+        <link
+          rel="preload"
+          as="image"
+          href="/stab-cult.webp"
+          type="image/webp"
+        />
       </Head>
       <body>
         <Main />
