@@ -10,7 +10,7 @@ import {
 } from "@react-three/postprocessing";
 import { useRouter } from "next/router";
 import { BlendFunction } from "postprocessing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Color } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
@@ -74,6 +74,7 @@ const Stab = () => {
   const [isGrabbing, setIsGrabbing] = useState(false);
   const router = useRouter();
   const { setLoading } = useGlobalLoadingStore();
+  useEffect(() => {}, []);
   return (
     <div
       // onClick={() => {

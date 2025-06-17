@@ -2,9 +2,9 @@ import useGlobalLoadingStore from "@/stores/loading";
 import { useCartStore } from "@/stores/useCartStore";
 import { useHasHydrated } from "@/stores/useHasHydrated";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { FiHome, FiSearch, FiShoppingCart } from "react-icons/fi";
+import { Spinner } from "./ui/Spinner";
 
 const Stab = dynamic(() => import("./Stab"), {
   ssr: false,
@@ -12,13 +12,8 @@ const Stab = dynamic(() => import("./Stab"), {
 });
 const Loading = () => {
   return (
-    <div className="flex items-center justify-center h-[80px] w-[120px] ">
-      <Image
-        src={"/stab_logo_static.png"}
-        width={300}
-        height={100}
-        alt="yeah"
-      />
+    <div className="flex items-center justify-center h-[80px] w-[50px] ">
+      <Spinner />
     </div>
   );
 };

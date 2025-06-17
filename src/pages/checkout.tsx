@@ -182,7 +182,7 @@ const CheckoutPage = () => {
                     }
                     id="firstName"
                     placeholder="Enter your first name"
-                    className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
                 </div>
@@ -204,7 +204,7 @@ const CheckoutPage = () => {
                     }
                     id="lastName"
                     placeholder="Enter your last name"
-                    className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
                 </div>
@@ -226,7 +226,7 @@ const CheckoutPage = () => {
                     type="email"
                     id="email"
                     placeholder="you@email.com"
-                    className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
                 </div>
@@ -249,7 +249,7 @@ const CheckoutPage = () => {
                     pattern="[0-9]{11}"
                     id="contact"
                     placeholder="09XXXXXXXXX"
-                    className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                    className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
                 </div>
@@ -364,7 +364,7 @@ const CheckoutPage = () => {
                       id="street"
                       type="text"
                       placeholder="e.g. 123 Rizal Street"
-                      className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                      className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                       required
                     />
                   </div>
@@ -392,7 +392,7 @@ const CheckoutPage = () => {
                       id="barangay"
                       type="text"
                       placeholder="e.g. Brgy. Mabolo"
-                      className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                      className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                       required
                     />
                   </div>
@@ -418,7 +418,7 @@ const CheckoutPage = () => {
                         id="city"
                         type="text"
                         placeholder="e.g. Cebu City"
-                        className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                        className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                         required
                       />
                     </div>
@@ -445,7 +445,7 @@ const CheckoutPage = () => {
                         id="province"
                         type="text"
                         placeholder="e.g. Cebu"
-                        className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                        className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                         required
                       />
                     </div>
@@ -471,7 +471,7 @@ const CheckoutPage = () => {
                       id="zip"
                       type="text"
                       placeholder="e.g. 6000"
-                      className="px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                      className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                       required
                     />
                   </div>
