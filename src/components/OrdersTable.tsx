@@ -1,7 +1,11 @@
+// OrdersTable.tsx
+import { formatPrice } from "@/lib/utils";
+import { Popover } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import OrdersTableFilters from "./OrdersTableFilters";
 import { Spinner } from "./ui/Spinner";
 
 const OrdersTable = ({
@@ -12,6 +16,8 @@ const OrdersTable = ({
   filterOptions,
   setFilters,
   loading,
+  metaPagination,
+  onPageChange,
 }: {
   orders: any[];
   search: string;
@@ -20,234 +26,161 @@ const OrdersTable = ({
   setFilters: any;
   filterOptions: any;
   loading: boolean;
+  metaPagination: {
+    page: number;
+    pageCount: number;
+    pageSize: number;
+    total: number;
+  };
+  onPageChange: (page: number) => void;
 }) => {
   const [modalImage, setModalImage] = useState<string | null>(null);
   const router = useRouter();
   const [showShirtDropdown, setShowShirtDropdown] = useState(false);
   const [showColorDropdown, setShowColorDropdown] = useState(false);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
-  const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev: any) => ({
-      ...prev,
-      [key]: value,
-    }));
 
+  const handleFilterChange = (key: string, value: string) => {
+    setFilters((prev: any) => ({ ...prev, [key]: value }));
+    onPageChange(1);
     const params = new URLSearchParams(window.location.search);
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState({}, "", newUrl);
+    value ? params.set(key, value) : params.delete(key);
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}?${params}`
+    );
   };
+
+  const renderItemsCell = (items: any[]) => (
+    <Popover className="relative">
+      <Popover.Button className="text-xs text-blue-600 underline">
+        {items.length > 0
+          ? `${items[0].name} ${items.length > 1 ? `+${items.length - 1}` : ""}`
+          : "No items"}
+      </Popover.Button>
+      <Popover.Panel className="absolute z-10 p-2 mt-2 overflow-y-auto bg-white border rounded shadow-md w-80 max-h-64">
+        {items.map((item, idx) => (
+          <div key={idx} className="flex items-center gap-4 mb-2">
+            <div className="relative w-14 h-14">
+              <Image
+                width={100}
+                height={100}
+                alt=""
+                src={item.image}
+                className="object-cover rounded"
+              />
+              <div className="absolute top-[-8px] right-[-8px]">
+                <p className="flex items-center justify-center w-4 h-4 text-xs font-semibold text-white bg-purple-900 rounded-full">
+                  {item.quantity}
+                </p>
+              </div>
+            </div>
+            <div className="text-xs">
+              <p className="font-medium lowercase">{item.name}</p>
+              <p className="text-gray-500 uppercase">{item.color}</p>
+              <p className="text-gray-500 lowercase">{item.size}</p>
+              <p>{formatPrice(item.price * item.quantity)}</p>
+            </div>
+          </div>
+        ))}
+      </Popover.Panel>
+    </Popover>
+  );
 
   return (
     <div className="w-full">
-      <div className="flex flex-col w-full max-w-full gap-2 mb-4 md:flex-row md:items-center md:gap-4">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => {
-            const value = e.target.value;
-            setSearch(value);
-            const params = new URLSearchParams(window.location.search);
-            if (value) {
-              params.set("search", value);
-            } else {
-              params.delete("search");
-            }
-            const newUrl = `${window.location.pathname}?${params.toString()}`;
-            window.history.replaceState({}, "", newUrl);
-          }}
-          placeholder="Search orders..."
-          className="w-full px-4 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
-        />
-        <div className="relative w-full ">
-          <button
-            type="button"
-            className="flex items-center justify-between w-full px-4 py-2 text-sm text-left lowercase bg-white border border-gray-300 rounded"
-            onClick={() => setShowShirtDropdown(!showShirtDropdown)}
-          >
-            {filters.item || "All Items"}
-            <span>▾</span>
-          </button>
-          {showShirtDropdown && (
-            <div className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded shadow-lg max-h-64">
-              <div
-                onClick={() => {
-                  handleFilterChange("item", "");
-                  setShowShirtDropdown(false);
-                }}
-                className="px-4 py-2 text-sm lowercase cursor-pointer hover:bg-gray-100"
-              >
-                All Items
-              </div>
-              {filterOptions.products.map((product: any) => {
-                return (
-                  <div
-                    key={product.name}
-                    onClick={() => {
-                      handleFilterChange("item", product.name);
-                      setShowShirtDropdown(false);
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 text-sm lowercase cursor-pointer hover:bg-gray-100"
-                  >
-                    <img
-                      src={product.images?.[0]?.url || "/fallback.jpg"}
-                      alt=""
-                      className="object-cover w-6 h-6 rounded"
-                    />
-                    {product.name}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="relative w-full ">
-          <button
-            type="button"
-            className="flex items-center justify-between w-full px-4 py-2 text-sm text-left bg-white border border-gray-300 rounded"
-            onClick={() => setShowColorDropdown(!showColorDropdown)}
-          >
-            {filters.color || "All Colors"}
-            <span>▾</span>
-          </button>
-          {showColorDropdown && (
-            <div className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded shadow-lg max-h-64">
-              <div
-                onClick={() => {
-                  handleFilterChange("color", "");
-                  setShowColorDropdown(false);
-                }}
-                className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-              >
-                All Colors
-              </div>
-              {filterOptions.colors.map((color: any) => (
-                <div
-                  key={color.key}
-                  onClick={() => {
-                    handleFilterChange("color", color.name);
-                    setShowColorDropdown(false);
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                >
-                  <span
-                    className="w-4 h-4 border rounded-full"
-                    style={{ backgroundColor: color.hex }}
-                  />
-                  {color.name}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="relative w-full ">
-          <button
-            type="button"
-            className="flex items-center justify-between w-full px-4 py-2 text-sm text-left bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-50"
-            onClick={() => setShowSizeDropdown(!showSizeDropdown)}
-          >
-            {filters.size || "All Sizes"}
-            <span>▾</span>
-          </button>
-          {showSizeDropdown && (
-            <div className="absolute z-10 w-full mt-1 overflow-auto bg-white border border-gray-300 rounded shadow-lg max-h-64">
-              <div
-                onClick={() => {
-                  handleFilterChange("size", "");
-                  setShowSizeDropdown(false);
-                }}
-                className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-              >
-                All Sizes
-              </div>
-              {filterOptions.sizes.map((size: any) => (
-                <div
-                  key={size.key}
-                  onClick={() => {
-                    handleFilterChange("size", size.label);
-                    setShowSizeDropdown(false);
-                  }}
-                  className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                >
-                  {size.label}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
+      {/* existing search/filter UI... */}
+      <OrdersTableFilters
+        search={search}
+        setSearch={setSearch}
+        filters={filters}
+        setFilters={setFilters}
+        filterOptions={filterOptions}
+        showShirtDropdown={showShirtDropdown}
+        setShowShirtDropdown={setShowShirtDropdown}
+        showColorDropdown={showColorDropdown}
+        setShowColorDropdown={setShowColorDropdown}
+        showSizeDropdown={showSizeDropdown}
+        setShowSizeDropdown={setShowSizeDropdown}
+        handleFilterChange={handleFilterChange}
+        onPageChange={onPageChange}
+        page={metaPagination.page}
+      />
       {loading ? (
         <div className="flex items-center justify-center h-[50vh]">
           <Spinner />
         </div>
-      ) : !loading && orders.length > 0 ? (
-        orders.map((order, idx) => (
-          <div key={idx} className="p-4 border rounded shadow-sm">
-            <div className="flex items-center justify-between mb-2 text-sm text-gray-600">
-              <span className="font-medium">Order ID: {order.orderId}</span>
-              <span>₱{order.total.toFixed(2)}</span>
-            </div>
-
-            <div className="mb-4 text-sm text-gray-700">
-              <p className="font-medium">
-                {order.firstName} {order.lastName}
-              </p>
-              <p>{order.email}</p>
-              <p>{order.contactNumber}</p>
-              <p className="mt-1 italic">
-                {order.deliveryMethod === "ship"
-                  ? `${order.address.street}, ${order.address.barangay}, ${order.address.city}, ${order.address.province}, ${order.address.zip}`
-                  : "Pick up"}
-              </p>
-              <p className="capitalize">Payment: {order.paymentMethod}</p>
-            </div>
-
-            <div className="space-y-4">
-              {order.items?.map((item: any, i: number) => (
-                <div key={i} className="flex gap-4">
-                  <Image
-                    width={100}
-                    height={100}
-                    alt=""
-                    src={item.image}
-                    className="object-cover rounded"
-                  />
-                  <div className="text-sm text-gray-800">
-                    <p className="font-medium lowercase">{item.name}</p>
-                    <p className="text-xs text-gray-500 uppercase">
-                      {item.color}
-                    </p>
-                    <p className="text-xs text-gray-500 lowercase">
-                      {item.size}
-                    </p>
-                    <p className="text-xs">x{item.quantity}</p>
-                    <p className="text-xs">
-                      ₱{(item.price * item.quantity).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
+      ) : orders.length > 0 ? (
+        <div className="hidden md:block">
+          <table className="w-full text-sm border border-gray-300">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-2 text-left">Order ID</th>
+                <th className="p-2 text-left">Customer</th>
+                <th className="p-2 text-left">Email</th>
+                <th className="p-2 text-left">Contact</th>
+                <th className="p-2 text-left">Delivery</th>
+                <th className="p-2 text-left">Payment</th>
+                <th className="p-2 text-left">Items</th>
+                <th className="p-2 text-left">Total</th>
+                <th className="p-2 text-left">Proof</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, idx) => (
+                <tr key={idx} className="border-t">
+                  <td className="p-2">{order.orderId}</td>
+                  <td className="p-2">
+                    {order.firstName} {order.lastName}
+                  </td>
+                  <td className="p-2">{order.email}</td>
+                  <td className="p-2">{order.contactNumber}</td>
+                  <td className="p-2">
+                    {order.deliveryMethod === "ship"
+                      ? `${order.address.city}`
+                      : "Pick up"}
+                  </td>
+                  <td className="p-2 capitalize">{order.paymentMethod}</td>
+                  <td className="p-2">{renderItemsCell(order.items)}</td>
+                  <td className="p-2">{formatPrice(order.total)}</td>
+                  <td className="p-2">
+                    {order.proof && (
+                      <Image
+                        width={32}
+                        height={32}
+                        src={order.proof.url}
+                        alt="Proof"
+                        className="object-cover rounded cursor-pointer"
+                        onClick={() => setModalImage(order.proof.url)}
+                      />
+                    )}
+                  </td>
+                </tr>
               ))}
-            </div>
-
-            <div className="mt-4">
-              <Image
-                width={48}
-                height={48}
-                src={order.proof.url}
-                alt="Proof"
-                className="object-cover w-12 h-12 rounded cursor-pointer hover:opacity-80"
-                onClick={() => setModalImage(order.proof.url)}
-              />
-            </div>
+            </tbody>
+          </table>
+          {/* Pagination Controls */}
+          <div className="flex justify-center gap-2 mt-6">
+            <button
+              disabled={metaPagination.page === 1}
+              onClick={() => onPageChange(metaPagination.page - 1)}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-2 py-1">
+              Page {metaPagination.page} of {metaPagination.pageCount}
+            </span>
+            <button
+              disabled={metaPagination.page === metaPagination.pageCount}
+              onClick={() => onPageChange(metaPagination.page + 1)}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
           </div>
-        ))
+        </div>
       ) : (
         <div className="flex items-center justify-center h-[50vh]">
           <p className="text-center text-gray-500">
@@ -261,6 +194,49 @@ const OrdersTable = ({
           </p>
         </div>
       )}
+
+      {/* Mobile Compact View */}
+      <div className="space-y-4 md:hidden">
+        {orders.map((order, idx) => (
+          <div key={idx} className="p-4 border rounded shadow-sm">
+            <p className="text-sm font-semibold">{order.orderId}</p>
+            <p className="text-sm">
+              {order.firstName} {order.lastName}
+            </p>
+            <p className="text-xs text-gray-500">{order.email}</p>
+            <p className="text-xs text-gray-500">{order.contactNumber}</p>
+            <p className="text-xs italic">
+              {order.deliveryMethod === "ship"
+                ? `${order.address.city}`
+                : "Pick up"}
+            </p>
+            <p className="text-xs capitalize">{order.paymentMethod}</p>
+            <div className="">{renderItemsCell(order.items)}</div>
+            <p className="mt-2 text-xs font-medium">
+              ₱{order.total.toFixed(2)}
+            </p>
+          </div>
+        ))}
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            disabled={metaPagination.page === 1}
+            onClick={() => onPageChange(metaPagination.page - 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-2 py-1">
+            Page {metaPagination.page} of {metaPagination.pageCount}
+          </span>
+          <button
+            disabled={metaPagination.page === metaPagination.pageCount}
+            onClick={() => onPageChange(metaPagination.page + 1)}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      </div>
 
       <AnimatePresence>
         {modalImage && (

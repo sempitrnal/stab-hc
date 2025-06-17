@@ -6,6 +6,7 @@ const nextConfig = {
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
+  compress: true,
   images: {
     remotePatterns: [
       {

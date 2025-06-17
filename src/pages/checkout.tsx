@@ -8,8 +8,15 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const CheckoutPage = () => {
-  const items = useCartStore((s) => s.items);
-  console.log(items);
+  const {
+    isOpen,
+    closeCart,
+    items,
+    totalPrice,
+    removeFromCart,
+    updateQuantity,
+  } = useCartStore();
+  console.log(isOpen);
   const total = useCartStore((s) => s.totalPrice());
   const hasHydrated = useHasHydrated();
   const router = useRouter();
@@ -36,10 +43,10 @@ const CheckoutPage = () => {
     },
   });
   const handleSubmit = async () => {
-    if (!proofFile) {
-      toast.error("Please upload proof of payment");
-      return;
-    }
+    // if (!proofFile) {
+    //   toast.error("Please upload proof of payment");
+    //   return;
+    // }
     const {
       firstName,
       lastName,
@@ -51,11 +58,11 @@ const CheckoutPage = () => {
     } = form;
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("proof", proofFile); // can be File or Blob
+      // const formData = new FormData();
+      // formData.append("proof", proofFile); // can be File or Blob
 
-      const uploadRes = await axios.post("/api/upload", formData);
-      const uploadedFile = uploadRes.data[0]; // Get uploaded file ref
+      // const uploadRes = await axios.post("/api/upload", formData);
+      // const uploadedFile = uploadRes.data[0]; // Get uploaded file ref
 
       // 2. Submit order to Strapi
       const orderPayload = {
@@ -85,7 +92,7 @@ const CheckoutPage = () => {
             image: i.image,
             color: i.color,
           })),
-          proof: uploadedFile.id,
+          // proof: uploadedFile.id,
         },
       };
       console.log(JSON.stringify(orderPayload, null, 2));
@@ -96,7 +103,20 @@ const CheckoutPage = () => {
       router.push(`/order-success?ref=${res.data.data.orderId}`, undefined, {
         scroll: false,
       });
-      // await axios.post("/api/send-order-email", { order: res.data.data });
+      console.log(res.data);
+      await axios.post("/api/send-order-email", {
+        order: {
+          ...res.data.data,
+          items: items.map((i) => ({
+            name: i.name,
+            size: i.size,
+            quantity: i.quantity,
+            price: i.price,
+            image: i.image,
+            color: i.color,
+          })),
+        },
+      });
       useCartStore.getState().clearCart();
     } catch (err) {
       console.error(err);
@@ -109,11 +129,11 @@ const CheckoutPage = () => {
       className={`${
         items.length === 0
           ? "flex flex-row justify-center mt-20"
-          : "flex flex-col-reverse lg:grid lg:grid-cols-3 lg:gap-10 lg:max-w-6xl"
-      } p-6 mx-auto lowercase`}
+          : "flex flex-col-reverse lg:grid lg:grid-cols-3 lg:gap-10 lg:max-w-5xl"
+      } p-4 lg:px-0 mx-auto lowercase`}
     >
       <Head>
-        <title className="lowecase">Checkout | stab.cult merch</title>
+        <title className="lowecase">checkout | stab.cult</title>
       </Head>
       {items.length === 0 && !loading ? (
         <div className="flex flex-col items-center justify-center w-full ">

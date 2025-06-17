@@ -1,4 +1,5 @@
 // @ts-nocheck
+import useGlobalLoadingStore from "@/stores/loading";
 import { MeshReflectorMaterial, OrbitControls } from "@react-three/drei";
 import { Canvas, useLoader } from "@react-three/fiber";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@react-three/postprocessing";
 import { useRouter } from "next/router";
 import { BlendFunction } from "postprocessing";
+import { useState } from "react";
 import { Color } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
@@ -67,20 +69,36 @@ const Box = () => {
     </mesh>
   );
 };
-const Stab = () => {
-  const router = useRouter();
 
+const Stab = () => {
+  const [isGrabbing, setIsGrabbing] = useState(false);
+  const router = useRouter();
+  const { setLoading } = useGlobalLoadingStore();
   return (
     <div
-      // onClick={() => router.push("/")}
-      className="h-[100px] w-[150px] md:h-[120px] md:w-[700px] sm:translate-x-[1.9rem]"
+      // onClick={() => {
+      //   if (router.pathname === "/") {
+      //     window.scrollTo({ top: 0, behavior: "smooth" });
+      //   } else {
+      //     router.push("/", undefined, { scroll: false });
+      //     setLoading(true);
+      //   }
+      // }}
+      onMouseDown={() => setIsGrabbing(true)}
+      onMouseUp={() => setIsGrabbing(false)}
+      onMouseLeave={() => setIsGrabbing(false)}
+      className={`h-[80px] w-[200px] translate-x-[-3rem]   ${
+        isGrabbing ? "cursor-grabbing" : "cursor-grab"
+      }`}
     >
       <Canvas style={{}}>
         <OrbitControls
-          autoRotate
+          // autoRotate
           autoRotateSpeed={0.5}
-          maxDistance={1}
+          maxDistance={0.9}
           minDistance={0.7}
+          enableZoom={false}
+          enablePan={false}
         />
         <directionalLight position={[-1, 1.5, 6]} intensity={0.05} />
         <directionalLight position={[-3.5, 0.5, 5]} intensity={0.15} />

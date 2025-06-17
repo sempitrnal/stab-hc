@@ -1,7 +1,7 @@
 // pages/api/orders.ts
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-
+import qs from "qs";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -66,7 +66,25 @@ export default async function handler(
           queryParams.append(key, value);
         });
       }
+      const parsedQuery = qs.parse(req.url?.split("?")[1] || "");
 
+      let pageSize: string | undefined;
+      if (
+        parsedQuery.pagination &&
+        typeof parsedQuery.pagination === "object" &&
+        "pageSize" in parsedQuery.pagination
+      ) {
+        pageSize = (parsedQuery.pagination as Record<string, any>).pageSize;
+      }
+      if (
+        parsedQuery.pagination &&
+        typeof parsedQuery.pagination === "object" &&
+        "page" in parsedQuery.pagination
+      ) {
+        const page = (parsedQuery.pagination as Record<string, any>).page;
+        queryParams.append("pagination[page]", String(page));
+      }
+      if (pageSize) queryParams.append("pagination[pageSize]", pageSize);
       queryParams.append("populate", "*");
 
       const url = `${process.env.STRAPI_URL}/api/orders?${queryParams.toString()}`;

@@ -1,3 +1,4 @@
+import useGlobalLoadingStore from "@/stores/loading";
 import { useCartStore } from "@/stores/useCartStore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -12,8 +13,8 @@ const CartDrawer = () => {
     removeFromCart,
     updateQuantity,
   } = useCartStore();
-  console.log(isOpen);
   const router = useRouter();
+  const { setLoading } = useGlobalLoadingStore();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -123,8 +124,12 @@ const CartDrawer = () => {
                 </p>
                 <button
                   onClick={() => {
-                    router.push("/checkout");
                     closeCart();
+                    setTimeout(() => {
+                      router.push("/checkout", undefined, {
+                        scroll: false,
+                      });
+                    }, 500);
                   }}
                   className="w-full py-2 text-white lowercase bg-black rounded hover:bg-gray-800"
                 >

@@ -13,7 +13,13 @@ const Orders = () => {
   const [filters, setFilters] = useState({ color: "", size: "", item: "" });
   const [filterOptions, setFilterOptions] = useState<any>();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  console.log(search);
+  const [metaPagination, setMetaPagination] = useState({
+    page: 1,
+    pageCount: 1,
+    pageSize: 10,
+    total: 0,
+  });
+
   useEffect(() => {
     const fetchAllOrders = async () => {
       setLoading(true);
@@ -35,30 +41,38 @@ const Orders = () => {
 
     fetchAllOrders();
   }, []);
-  console.log(search);
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
 
       try {
         if (!search && !filters.item && !filters.color && !filters.size) {
-          const res = await fetch("/api/orders?populate=*");
+          const res = await fetch(
+            `/api/orders?populate=*&pagination[pageSize]=10&pagination[page]=${metaPagination.page}`
+          );
           const json = await res.json();
+          console.log(json);
           setOrders(json.data);
+          setMetaPagination(json.meta.pagination);
           setTimeout(() => setLoading(false), 2000);
           return;
         }
 
         const query = new URLSearchParams();
-        if (search) query.append("search", search);
+        if (search) {
+          query.append("search", search);
+        }
         if (filters.item) query.append("item", filters.item);
         if (filters.color) query.append("color", filters.color);
         if (filters.size) query.append("size", filters.size);
         query.append("populate", "*");
-
+        query.append("pagination[pageSize]", "10");
+        query.append("pagination[page]", String(metaPagination.page));
         const res = await fetch(`/api/orders?${query.toString()}`);
         const json = await res.json();
+        console.log(json);
         setOrders(json.data);
+        setMetaPagination(json.meta.pagination);
         setTimeout(() => setLoading(false), 2000);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
@@ -66,7 +80,7 @@ const Orders = () => {
     };
 
     fetchOrders();
-  }, [search, filters]);
+  }, [search, filters, metaPagination.page]);
 
   type Tally = Record<
     string,
@@ -79,9 +93,9 @@ const Orders = () => {
   const itemTally: Tally = {};
   const sizeOrder = [
     "xs",
-    "sm",
-    "md",
-    "lg",
+    "small",
+    "medium",
+    "large",
     "xl",
     "2xl",
     "3xl",
@@ -195,6 +209,10 @@ const Orders = () => {
     <div className="flex flex-col gap-4 p-5 md:p-20">
       <h1 className="mb-4 text-3xl font-bold">Orders</h1>
       <OrdersTable
+        metaPagination={metaPagination}
+        onPageChange={(page) => {
+          setMetaPagination((prev) => ({ ...prev, page }));
+        }}
         orders={orders}
         search={search}
         setSearch={setSearch}

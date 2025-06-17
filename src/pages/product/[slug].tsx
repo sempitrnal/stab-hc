@@ -161,7 +161,7 @@ const Product = ({ product }: { product: Product[] }) => {
         </Head>
       }
     >
-      <main className="w-full max-w-5xl min-h-screen p-4 mx-auto sm:p-8 md:px-12 md:py-8">
+      <main className="w-full max-w-5xl min-h-screen p-4 mx-auto lg:px-0 md:py-8">
         <div
           className="flex items-center gap-2 mb-6 text-xl cursor-pointer row hover:text-gray-600"
           onClick={() => {

@@ -72,7 +72,9 @@ const OrderSuccess = () => {
         <div className="flex flex-col gap-2 p-4 mb-6 text-sm text-left border rounded-md bg-gray-50">
           <p>
             <span className="font-medium">Order Reference:</span>{" "}
-            <span className="text-gray-800">{orderData.orderId}</span>
+            <span className="font-mono text-base font-semibold text-gray-800 uppercase">
+              {orderData.orderId}
+            </span>
           </p>
           <p>
             <span className="font-medium">Payment Method:</span>{" "}

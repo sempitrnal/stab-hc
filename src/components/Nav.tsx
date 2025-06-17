@@ -1,17 +1,22 @@
+import useGlobalLoadingStore from "@/stores/loading";
 import { useCartStore } from "@/stores/useCartStore";
 import { useHasHydrated } from "@/stores/useHasHydrated";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Suspense } from "react";
 import { FiHome, FiSearch, FiShoppingCart } from "react-icons/fi";
-import Stab from "./Stab";
+
+const Stab = dynamic(() => import("./Stab"), {
+  ssr: false,
+  loading: () => <Loading />,
+});
 const Loading = () => {
   return (
-    <div className=" flex justify-center items-center h-[100px] w-[150px] md:h-[130px] md:w-[800px] sm:translate-x-[2.1rem] ">
+    <div className="flex items-center justify-center h-[80px] w-[120px] ">
       <Image
         src={"/stab_logo_static.png"}
-        width={160}
-        height={160}
+        width={300}
+        height={100}
         alt="yeah"
       />
     </div>
@@ -39,18 +44,26 @@ const CartButton = () => {
 };
 const Nav = () => {
   const router = useRouter();
+  const { setLoading } = useGlobalLoadingStore();
+
   return (
-    <nav className="sticky top-0 z-[9998] w-full h-32 bg-white border-b drop-shadow-[#616161_0px_1px_1px_rgba(79, 79, 79, 0.05)]">
-      <div className="flex items-center justify-between px-5 pt-1 lg:px-20">
-        <p className="hidden px-3 text-lg leading-loose tracking-widest text-center rounded-md w-max sm:block"></p>
-        <Suspense fallback={<Loading />}>
+    <nav className=" sticky top-0 z-[9998] w-full h-20   bg-white px-5 lg:px-0 border-b  ">
+      <div className="flex items-center justify-between max-w-5xl mx-auto">
+        <div className="">
           <Stab />
-        </Suspense>
+        </div>
 
         <div className="flex items-end gap-5 row">
           <ul className="flex items-center gap-2 text-2xl">
             <li
-              onClick={() => router.push("/", undefined, { scroll: false })}
+              onClick={() => {
+                if (router.pathname === "/") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  router.push("/", undefined, { scroll: false });
+                  setLoading(true);
+                }
+              }}
               className="transition-colors duration-300 cursor-pointer hover:text-stone-600"
             >
               <FiHome />

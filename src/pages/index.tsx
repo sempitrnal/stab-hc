@@ -1,12 +1,14 @@
+import Hero from "@/components/Hero";
+import ProductCarousel from "@/components/ProductCarousel";
 import useGlobalLoadingStore from "@/stores/loading";
 import DefaultTemplate from "@/templates/default-template";
 import { Product } from "@/types/product";
-import { motion } from "framer-motion";
 import Head from "next/head";
-import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 const Home = ({ products }: { products: Product[] }) => {
   const [playing, setPlaying] = useState(false);
   const [clickedProductSlug, setClickedProductSlug] = useState<string | null>(
@@ -41,7 +43,10 @@ const Home = ({ products }: { products: Product[] }) => {
   // const { data, loading, error } = useQuery(GET_HOMEPAGE);
   // if (loading) return <Loading />;
   console.log(products);
-  const { setLoading } = useGlobalLoadingStore();
+  const { setLoading, loading } = useGlobalLoadingStore();
+  useEffect(() => {
+    setLoading(false);
+  }, []);
   return (
     <DefaultTemplate
       head={
@@ -85,9 +90,6 @@ const Home = ({ products }: { products: Product[] }) => {
             content="https://www.stabcult.com/dead.jpg"
           />
 
-          <link rel="shortcut icon" href="/knife.ico" type="image/x-icon" />
-          <link rel="icon" href="/knife.ico" type="image/x-icon" />
-
           {/* json-ld schema */}
           <script
             type="application/ld+json"
@@ -116,82 +118,29 @@ const Home = ({ products }: { products: Product[] }) => {
         </Head>
       }
     >
-      <main>
-        <div className="w-full max-w-5xl min-h-screen p-4 mx-auto mt-4 sm:p-8 md:p-12">
-          <h1 className="sticky top-0 z-10 mb-10 text-4xl font-light tracking-tight bg-white md:mb-20 text-start scroll-m-20 text-stone-800 text-balance">
-            mertz
-          </h1>
-
-          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col gap-3 transition-all duration-300 ease-in-out cursor-pointer group"
-                  onClick={() => {
-                    setClickedProductSlug(product.slug);
-                    setLoading(true);
-                    router.push(`/product/${product.slug}`, undefined, {
-                      scroll: false,
-                    });
-                  }}
-                >
-                  <div className="relative w-full aspect-[4/4] overflow-hidden rounded-md">
-                    <motion.div
-                      className="absolute inset-0"
-                      initial={{ opacity: 1 }}
-                      whileHover={{ opacity: product.images[1] ? 0 : 1 }}
-                      transition={{ duration: 0.25, ease: "easeInOut" }}
-                    >
-                      <Image
-                        src={product.images[0].url}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </motion.div>
-
-                    {product.images[1] && (
-                      <motion.div
-                        className="absolute inset-0"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                      >
-                        <Image
-                          src={product.images[1].url}
-                          alt={product.name + " (hover image)"}
-                          fill
-                          className="object-cover"
-                        />
-                      </motion.div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-3">
-                      <p className="text-2xl font-light tracking-tight text-[#282828] scroll-m-20 underline-offset-4 group-hover:underline">
-                        {product.name.toLowerCase()}
-                      </p>
-                      {product.preorder && (
-                        <span className="px-2 py-1 text-xs font-semibold text-white no-underline lowercase translate-y-0.5 bg-yellow-400 rounded group-hover:no-underline">
-                          preorder
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-sm font-extralight">
-                      ₱
-                      {new Intl.NumberFormat("en-PH", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }).format(product.price)}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+      <main className="">
+        <Hero />
+        <div className="w-full max-w-5xl min-h-screen p-5 px-5 mx-auto mt-5 md:p-0">
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <h1 className="z-10 text-4xl font-light tracking-tight text-start text-stone-800 text-balance">
+              merch
+            </h1>
+            <Link
+              href={`/merch`}
+              scroll={false}
+              className="px-4 py-1 text-sm font-semibold text-[#9679ff] border rounded -md border-[#9679ff] hover:bg-[#9679ff] hover:text-white transition-colors duration-300 ease-in-out"
+              onClick={() => {
+                setClickedProductSlug(null);
+                setLoading(true);
+              }}
+            >
+              view all
+            </Link>
           </div>
+          <ProductCarousel
+            products={products}
+            setClickedProductSlug={setClickedProductSlug}
+          />
         </div>
       </main>
     </DefaultTemplate>
@@ -230,7 +179,7 @@ export default Home;
 export const getStaticProps = async () => {
   try {
     const res = await fetch(
-      `${process.env.STRAPI_URL}/api/products?populate=*`
+      `${process.env.STRAPI_URL}/api/products?populate=*&pagination[limit]=6`
     );
 
     if (!res.ok) {

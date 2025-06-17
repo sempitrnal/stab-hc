@@ -11,7 +11,7 @@ const DefaultTemplate = ({
   const router = useRouter();
   return (
     <motion.div
-      className="w-full min-h-screen bg-[#ffffff] text-black "
+      className="w-full min-h-screen bg-[#b900d5] text-black "
       // style={{
       //   backgroundImage: "url('/old-cement-wall-texture.jpg')",
       //   backgroundSize: "cover",
