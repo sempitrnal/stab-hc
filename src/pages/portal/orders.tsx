@@ -63,7 +63,7 @@ const Orders = () => {
             `/api/orders?populate=*&pagination[pageSize]=10&pagination[page]=${metaPagination.page}`
           );
           const json = await res.json();
-          console.log(json);
+          console.log(json.data[0]);
           setOrders(json.data);
           setMetaPagination(json.meta.pagination);
           setTimeout(() => setLoading(false), 2000);
@@ -166,7 +166,6 @@ const Orders = () => {
 
     for (const product of products.data) {
       productSet.add(product);
-      console.log(product);
       if (Array.isArray(product.color)) {
         for (const color of product.color) {
           if (color?.key) {
@@ -218,7 +217,6 @@ const Orders = () => {
       sizes: sizes,
     });
   };
-  console.log(filterOptions);
   return (
     <div className="flex flex-col gap-4 p-5 md:p-20">
       <h1 className="mb-4 text-3xl font-bold">Orders</h1>

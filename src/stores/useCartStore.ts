@@ -9,6 +9,7 @@ type CartItem = {
   size: string;
   color: string;
   quantity: number;
+  productId: string;
 };
 
 type CartStore = {

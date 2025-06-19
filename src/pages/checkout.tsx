@@ -42,6 +42,7 @@ const CheckoutPage = () => {
       zip: "",
     },
   });
+  console.log(items);
   const handleSubmit = async () => {
     // if (!proofFile) {
     //   toast.error("Please upload proof of payment");
@@ -91,6 +92,7 @@ const CheckoutPage = () => {
             price: i.price,
             image: i.image,
             color: i.color,
+            productId: i.productId, // Assuming you have a productId in the item
           })),
           // proof: uploadedFile.id,
         },
@@ -181,7 +183,7 @@ const CheckoutPage = () => {
                       setForm({ ...form, firstName: e.target.value })
                     }
                     id="firstName"
-                    placeholder="Enter your first name"
+                    placeholder="arxan juan"
                     className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -203,7 +205,7 @@ const CheckoutPage = () => {
                       setForm({ ...form, lastName: e.target.value })
                     }
                     id="lastName"
-                    placeholder="Enter your last name"
+                    placeholder="estoque"
                     className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                     required
                   />
@@ -363,7 +365,7 @@ const CheckoutPage = () => {
                       }
                       id="street"
                       type="text"
-                      placeholder="e.g. 123 Rizal Street"
+                      placeholder="juana osmeña street"
                       className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                       required
                     />
@@ -391,7 +393,7 @@ const CheckoutPage = () => {
                       }
                       id="barangay"
                       type="text"
-                      placeholder="e.g. Brgy. Mabolo"
+                      placeholder="brgy. san roque"
                       className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                       required
                     />
@@ -417,7 +419,7 @@ const CheckoutPage = () => {
                         }
                         id="city"
                         type="text"
-                        placeholder="e.g. Cebu City"
+                        placeholder="talisay city"
                         className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                         required
                       />
@@ -444,7 +446,7 @@ const CheckoutPage = () => {
                         }
                         id="province"
                         type="text"
-                        placeholder="e.g. Cebu"
+                        placeholder="cebu"
                         className="px-4 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
                         required
                       />

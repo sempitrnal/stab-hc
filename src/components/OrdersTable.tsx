@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import DesktopOrderRow from "./DesktopOrderRow";
+import ItemModal from "./ItemModal";
 import MobileOrderCard from "./MobileOrderCard";
 import OrdersTableFilters from "./OrdersTableFilters";
 import { Spinner } from "./ui/Spinner";
@@ -47,6 +48,13 @@ const OrdersTable = ({
   const [showDeliveryDropdown, setShowDeliveryDropdown] = useState(false);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editItemModal, setEditItemModal] = useState<null | {
+    orderId: string;
+    itemIndex: number;
+    item: any;
+    product: any;
+    orderIndex: number;
+  }>(null);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev: any) => ({ ...prev, [key]: value }));
@@ -60,7 +68,7 @@ const OrdersTable = ({
     );
   };
 
-  const renderItemsCell = (items: any[]) => (
+  const renderItemsCell = (items: any[], order: any) => (
     <Popover className="relative">
       <Popover.Button className="px-2 py-1 mt-2 text-xs lowercase bg-white border border-gray-300 rounded text-stone-900 hover:bg-gray-100 focus:outline-none ">
         {items.length > 0
@@ -90,12 +98,30 @@ const OrdersTable = ({
               <p className="text-gray-500 lowercase">{item.size}</p>
               <p>{formatPrice(item.price * item.quantity)}</p>
             </div>
+            <div className="text-right">
+              <button
+                onClick={async () => {
+                  const res = await fetch(`/api/products/${item.productId}`);
+                  const product = await res.json();
+                  console.log(idx);
+                  setEditItemModal({
+                    orderId: order.id,
+                    itemIndex: idx,
+                    item,
+                    orderIndex: orders.findIndex((o) => o.id === order.id),
+                    product,
+                  });
+                }}
+                className="text-sm text-gray-500 underline"
+              >
+                Edit Item
+              </button>
+            </div>
           </div>
         ))}
       </Popover.Panel>
     </Popover>
   );
-  console.log(selectedOrders);
   return (
     <div className="w-full">
       <OrdersTableFilters
@@ -206,7 +232,7 @@ const OrdersTable = ({
                   isEditing={isEditing}
                   selectedOrders={selectedOrders}
                   setSelectedOrders={setSelectedOrders}
-                  renderItemsCell={renderItemsCell}
+                  renderItemsCell={(items) => renderItemsCell(items, order)}
                   formatPrice={formatPrice}
                   setModalImage={setModalImage}
                 />
@@ -258,7 +284,7 @@ const OrdersTable = ({
             isEditing={isEditing}
             selectedOrders={selectedOrders}
             setSelectedOrders={setSelectedOrders}
-            renderItemsCell={renderItemsCell}
+            renderItemsCell={(items) => renderItemsCell(items, order)}
           />
         ))}
         <div className="flex justify-center gap-2 mt-6">
@@ -308,6 +334,12 @@ const OrdersTable = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ItemModal
+        editItemModal={editItemModal}
+        setEditItemModal={setEditItemModal}
+        orders={orders}
+      />
     </div>
   );
 };

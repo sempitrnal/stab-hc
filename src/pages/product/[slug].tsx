@@ -44,9 +44,10 @@ const Product = ({ product }: { product: Product[] }) => {
         id: `${item.id}-${selectedSize}-${selectedColor}`,
         name: item.name,
         price: item.price,
-        image: item.images[activeImageIndex].url,
+        image: item.images[activeImageIndex]?.url ?? item.images[0]?.url,
         size: sizeName,
         color: colorName,
+        productId: item.id.toString(),
       },
       quantity
     );
@@ -248,7 +249,9 @@ const Product = ({ product }: { product: Product[] }) => {
                       key={color.key}
                       onClick={() => {
                         setSelectedColor(color.key);
-                        setActiveImage(item.images[idx].url); // ← use index to set image
+                        setActiveImage(
+                          item.images[idx]?.url || item.images[0]?.url
+                        ); // ← use index to set image
                         setActiveImageIndex(idx);
                       }}
                       className={`flex items-center gap-2 px-3 py-1 border rounded lowercase ${

@@ -61,7 +61,7 @@ const ProductCarousel = ({
         className={`
         absolute top-1/2 -translate-y-[40px] z-10
         ${hasPrev ? "cursor-pointer hover:opacity-50" : "cursor-default opacity-100"}
-        left-[-20px] md:left-[-30px]
+        left-[-20px] md:left-[-10px]
         transition-all duration-300 ease-in-out
       `}
       >
@@ -78,7 +78,7 @@ const ProductCarousel = ({
         className={`
         absolute top-1/2 -translate-y-[40px] z-10
         ${hasNext ? "cursor-pointer hover:opacity-50" : "cursor-default opacity-100"}
-        right-[-20px] md:right-[-30px]
+        right-[-20px] md:right-[-10px]
         transition-all duration-300 ease-in-out
       `}
       >
@@ -179,7 +179,7 @@ const ProductCarousel = ({
             className="rounded-md"
           >
             {products.map((product, index) => (
-              <div key={product.slug} className="px-1 lg:px-2">
+              <div key={product.slug} className="px-3 sm:px-3 md:px-5 lg:px-8">
                 <div
                   className="flex flex-col gap-3 transition-all duration-300 ease-in-out cursor-pointer group"
                   onClick={() => {

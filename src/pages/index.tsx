@@ -120,7 +120,7 @@ const Home = ({ products }: { products: Product[] }) => {
     >
       <main className="">
         <Hero />
-        <div className="w-full max-w-5xl min-h-screen p-5 px-5 mx-auto mt-5 md:p-0">
+        <div className="w-full max-w-5xl min-h-screen p-5 mx-auto mt-5 px-7 sm:px-10 lg:p-0">
           <div className="flex items-center justify-between gap-4 mb-8">
             <h1 className="z-10 text-4xl font-light tracking-tight text-start text-stone-800 text-balance">
               merch
