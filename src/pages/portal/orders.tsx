@@ -219,7 +219,7 @@ const Orders = () => {
   };
   return (
     <div className="flex flex-col gap-4 p-5 md:p-20">
-      <h1 className="mb-4 text-3xl font-bold">Orders</h1>
+      <h1 className="mb-4 text-3xl font-bold">Orderz</h1>
 
       <OrdersTable
         metaPagination={metaPagination}
