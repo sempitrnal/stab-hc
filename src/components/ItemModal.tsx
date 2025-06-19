@@ -11,14 +11,15 @@ const ItemModal = ({
   setEditItemModal: (value: any) => void;
   orders: any[];
 }) => {
+  const [selectedColor, setSelectedColor] = useState(
+    editItemModal?.item.color || ""
+  );
   return (
     <AnimatePresence>
       {editItemModal &&
         (() => {
           // Local state for selectedColor, initialized with current color
-          const [selectedColor, setSelectedColor] = useState(
-            editItemModal?.item.color || ""
-          );
+
           return (
             <motion.div
               className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
